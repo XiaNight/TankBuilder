@@ -12,15 +12,23 @@ public class Builder : MonoBehaviour
 
 	public LayerMask mountLayer;
 	public LayerMask buildFloorLayer;
-	private Part selectedInstance;
+	public LayerMask partLayer;
+
+	private Vector3 centerScreen;
+
+	//- Part Highlight
+	private Part highlightedPart;
+
+	//- Building
+	private Part previewInstance;
 	private int mountSelector = 0;
+	private Quaternion currentRotation = Quaternion.identity;
+	private Mount focusedMount = null;
+	private bool isDirty = false;
 
 	//- Debug
 	private Vector3 rayCastPos = new();
 	private Color color = Color.red;
-	private Quaternion currentRotation = Quaternion.identity;
-	private Mount focusedMount = null;
-	private bool isDirty = false;
 
 	private void Awake()
 	{
@@ -37,11 +45,14 @@ public class Builder : MonoBehaviour
 		{
 			SetSelectedPartData(selectedPartData);
 		}
+
+		centerScreen = new Vector3(Screen.width / 2, Screen.height / 2);
 	}
 
 	private void Update()
 	{
-		CheckRayCast();
+		RayCastBuild();
+		RayCastPart();
 		CheckRotate();
 		if (Input.GetKeyDown(KeyCode.Tab))
 		{
@@ -54,23 +65,23 @@ public class Builder : MonoBehaviour
 	{
 		if (Input.GetKeyDown(KeyCode.Q))
 		{
-			selectedInstance.transform.Rotate(0, 90, 0, Space.World);
-			currentRotation = selectedInstance.transform.rotation;
+			previewInstance.transform.Rotate(0, 90, 0, Space.World);
+			currentRotation = previewInstance.transform.rotation;
 		}
 		else if (Input.GetKeyDown(KeyCode.E))
 		{
-			selectedInstance.transform.Rotate(0, -90, 0, Space.World);
-			currentRotation = selectedInstance.transform.rotation;
+			previewInstance.transform.Rotate(0, -90, 0, Space.World);
+			currentRotation = previewInstance.transform.rotation;
 		}
 		else if (Input.GetKeyDown(KeyCode.R))
 		{
-			selectedInstance.transform.Rotate(0, 0, 90, Space.World);
-			currentRotation = selectedInstance.transform.rotation;
+			previewInstance.transform.Rotate(0, 0, 90, Space.World);
+			currentRotation = previewInstance.transform.rotation;
 		}
 		else if (Input.GetKeyDown(KeyCode.F))
 		{
-			selectedInstance.transform.Rotate(0, 0, -90, Space.World);
-			currentRotation = selectedInstance.transform.rotation;
+			previewInstance.transform.Rotate(0, 0, -90, Space.World);
+			currentRotation = previewInstance.transform.rotation;
 		}
 	}
 
@@ -83,12 +94,44 @@ public class Builder : MonoBehaviour
 
 	#region Building
 
+	private void RayCastPart()
+	{
+		// Center Screen Ray Cast
+		Ray ray = Camera.main.ScreenPointToRay(centerScreen);
+		if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, partLayer))
+		{
+			if (hit.collider.GetComponentInParent<Part>() is Part part)
+			{
+				//- Highlight Part
+				if (highlightedPart != part)
+				{
+					if (highlightedPart != null) highlightedPart.SetHighlight(false);
+					highlightedPart = part;
+					highlightedPart.SetHighlight(true);
+				}
+
+				//- Remove Part
+				if (Input.GetMouseButtonDown(1))
+				{
+					Contraption contraption = part.GetContraption();
+					contraption.RemovePart(part);
+					Destroy(part.gameObject);
+				}
+				return;
+			}
+		}
+
+		//- Not hitting any part. Dehighlight the highlighted part.
+		if (highlightedPart != null) highlightedPart.SetHighlight(false);
+		highlightedPart = null;
+	}
+
 	/// <summary>
 	/// Check the raycast hit and try to mount the selected instance onto the mountee
 	/// </summary>
-	private void CheckRayCast()
+	private void RayCastBuild()
 	{
-		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+		Ray ray = Camera.main.ScreenPointToRay(centerScreen);
 		if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, mountLayer + buildFloorLayer))
 		{
 			// because RayCastHit redirects hit.transform to the it's parent rigidbody,
@@ -110,23 +153,27 @@ public class Builder : MonoBehaviour
 				if (success) color = Color.green;
 				else color = Color.red;
 			}
-			else
+			else //- Not hitting any mounting point.
 			{
+				//- Place on floor
 				// if hit the build floor, move the selected instance to the hit point, and grid it to 0.25f
 				Vector3 pos = hit.point;
 				pos.x = Mathf.Round(pos.x * 4) * 0.25f;
 				pos.z = Mathf.Round(pos.z * 4) * 0.25f;
-				selectedInstance.transform.position = pos;
+				previewInstance.transform.position = pos;
 
-				if (Input.GetMouseButtonDown(0)) Buildinstance(selectedInstance, vehicle.rootContraption);
+				if (Input.GetMouseButtonDown(0)) Buildinstance(previewInstance, vehicle.rootContraption);
 
 				color = Color.blue;
 			}
+
+			// Debug hit point
 			rayCastPos = hit.point;
 		}
-		else
+		else //- Hit nothing.
 		{
-			selectedInstance.transform.position = new Vector3(0, -100, 0);
+			//- Hide the selected instance outside view.
+			previewInstance.transform.position = new Vector3(0, -100, 0);
 			rayCastPos = ray.GetPoint(10);
 			color = Color.blue;
 		}
@@ -138,14 +185,15 @@ public class Builder : MonoBehaviour
 
 		if (contraption == null) contraption = vehicle.rootContraption;
 
-		Buildinstance(selectedInstance, contraption);
+		Buildinstance(previewInstance, contraption);
 	}
 
 	private void Buildinstance(Part part, Contraption contraption)
 	{
 		contraption.AddPart(part);
-		selectedInstance = null;
-		SpawnNewInstance();
+		part.SetColliderState(true);
+		previewInstance = null;
+		SpawnNewPreview();
 	}
 
 	/// <summary>
@@ -163,7 +211,7 @@ public class Builder : MonoBehaviour
 
 	private Mount FindMatchingMount(Mount mountee)
 	{
-		Mount[] matchingMounts = selectedInstance.FindMatchingMounts(mountee);
+		Mount[] matchingMounts = previewInstance.FindMatchingMounts(mountee);
 		if (matchingMounts.Length == 0)
 		{
 			color = Color.red;
@@ -180,10 +228,10 @@ public class Builder : MonoBehaviour
 	{
 		Vector3 mountingPos = mountee.transform.position;
 
-		Vector3 mountingLocalPos = mounter.transform.position - selectedInstance.transform.position;
+		Vector3 mountingLocalPos = mounter.transform.position - previewInstance.transform.position;
 		mountingPos -= mountingLocalPos;
 
-		selectedInstance.transform.position = mountingPos;
+		previewInstance.transform.position = mountingPos;
 		color = Color.green;
 	}
 
@@ -192,17 +240,18 @@ public class Builder : MonoBehaviour
 	public void SetSelectedPartData(PartData partData)
 	{
 		selectedPartData = partData;
-		SpawnNewInstance();
+		SpawnNewPreview();
 	}
 
-	private void SpawnNewInstance()
+	private void SpawnNewPreview()
 	{
-		if (selectedInstance != null) Destroy(selectedInstance.gameObject);
+		if (previewInstance != null) Destroy(previewInstance.gameObject);
 
-		selectedInstance = Instantiate(selectedPartData.Prefab);
-		selectedInstance.SetMetaData(selectedPartData);
-		selectedInstance.SetMountState(Mount.State.ShowOnly);
-		selectedInstance.transform.rotation = currentRotation;
+		previewInstance = Instantiate(selectedPartData.Prefab);
+		previewInstance.SetMetaData(selectedPartData);
+		previewInstance.SetMountState(Mount.State.ShowOnly);
+		previewInstance.SetColliderState(false);
+		previewInstance.transform.rotation = currentRotation;
 	}
 
 	public bool ComputeColliderPenetration(Collider[] collidersA, Vector3 posA, Quaternion rotA, Collider[] collidersB, Vector3 posB, Quaternion rotB, out Vector3 dir, out float dist)

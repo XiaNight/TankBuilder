@@ -1,8 +1,11 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+public class HangarManager : MonoBehaviour
 {
-	public static GameManager Instance { get; private set; }
+	public static HangarManager Instance { get; private set; }
+	public HangarFreeCam freeCam;
 	public Vehicle playerVehicle;
 	public State gameState;
 
@@ -14,7 +17,8 @@ public class GameManager : MonoBehaviour
 
 	private void Start()
 	{
-
+		gameState = new BuildingState();
+		freeCam = FindObjectOfType<HangarFreeCam>();
 	}
 
 	private void Update()

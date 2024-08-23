@@ -31,6 +31,6 @@ public class FreeHinge : Contraption
 
 	public override float CalculateMass()
 	{
-		return base.CalculateMass() + rb.mass;
+		return base.CalculateMass();
 	}
 }

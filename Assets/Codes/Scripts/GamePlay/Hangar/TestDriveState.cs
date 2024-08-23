@@ -1,10 +1,10 @@
 using UnityEngine;
 
-public class GameState : GameManager.State
+public class TestDriveState : HangarManager.State
 {
-	public GameState()
+	public TestDriveState()
 	{
-		Vehicle vehicle = GameManager.Instance.playerVehicle;
+		Vehicle vehicle = HangarManager.Instance.playerVehicle;
 		vehicle.SetPlayingMode(true);
 		vehicle.transform.SetPositionAndRotation(new Vector3(0, 0, 0), Quaternion.identity);
 		vehicle.RestoreOriginal();
@@ -16,7 +16,7 @@ public class GameState : GameManager.State
 
 		if (Input.GetKeyDown(KeyCode.Escape))
 		{
-			GameManager.Instance.gameState = new BuildingState();
+			HangarManager.Instance.gameState = new BuildingState();
 		}
 	}
 }

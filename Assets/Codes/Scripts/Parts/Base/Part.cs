@@ -5,12 +5,10 @@ public class Part : MonoBehaviour
 {
 	[SerializeField] private List<Mount> mounts = new();
 	[SerializeField] private List<Collider> physicColliders = new();
+	[SerializeField] private GameObject highlightVisual;
 
 	public Contraption ParentContraption { get; private set; }
 	private PartData metaData;
-
-	protected bool isMassCalculated;
-	protected float calculatedMass;
 
 	public Collider[] GetColliders()
 	{
@@ -22,9 +20,17 @@ public class Part : MonoBehaviour
 		return mounts.Contains(mount);
 	}
 
-	public virtual void SetPlayingState(bool state)
+	public virtual void SetPlayingState(bool isPlaying)
 	{
-		SetMountState(state ? Mount.State.Disabled : Mount.State.Enabled);
+		SetMountState(isPlaying ? Mount.State.Disabled : Mount.State.Enabled);
+	}
+
+	public virtual void SetColliderState(bool isEnabled)
+	{
+		foreach (Collider collider in physicColliders)
+		{
+			collider.enabled = isEnabled;
+		}
 	}
 
 	public virtual void SetMountState(Mount.State state)
@@ -75,9 +81,15 @@ public class Part : MonoBehaviour
 
 	public virtual float CalculateMass()
 	{
-		isMassCalculated = true;
-		calculatedMass = metaData.mass;
-		return calculatedMass;
+		if (metaData != null) return metaData.mass;
+
+		return 0;
+	}
+
+	public virtual void SetHighlight(bool isHighlighted)
+	{
+		if (highlightVisual == null) return;
+		highlightVisual.SetActive(isHighlighted);
 	}
 
 	#region Serialization

@@ -21,12 +21,12 @@ public class Contraption : Part
 		}
 	}
 
-	public override void SetPlayingState(bool state)
+	public override void SetPlayingState(bool isPlaying)
 	{
-		base.SetPlayingState(state);
+		base.SetPlayingState(isPlaying);
 		foreach (Part part in parts)
 		{
-			part.SetPlayingState(state);
+			part.SetPlayingState(isPlaying);
 		}
 	}
 
@@ -72,14 +72,11 @@ public class Contraption : Part
 
 	public override float CalculateMass()
 	{
-		if (isMassCalculated) return calculatedMass;
-		float mass = 0;
+		float mass = base.CalculateMass();
 		foreach (Part part in parts)
 		{
 			mass += part.CalculateMass();
 		}
-		isMassCalculated = true;
-		calculatedMass = mass;
-		return calculatedMass;
+		return mass;
 	}
 }
