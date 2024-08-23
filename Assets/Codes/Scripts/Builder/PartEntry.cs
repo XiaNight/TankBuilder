@@ -38,6 +38,6 @@ public class PartEntry : MonoBehaviour
 
 	public void OnClick()
 	{
-		Builder.Instance.SetSelectionPrefab(Part);
+		Builder.Instance.SetSelectedPartData(part);
 	}
 }

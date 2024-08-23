@@ -16,7 +16,11 @@ public class Vehicle : MonoBehaviour
 		rootContraption.SetPlayingState(isPlaying);
 		rb.isKinematic = !isPlaying;
 
-		if (!isPlaying)
+		if (isPlaying)
+		{
+			rb.mass = rootContraption.CalculateMass();
+		}
+		else
 		{
 			transform.position = Vector3.zero;
 			transform.rotation = Quaternion.identity;

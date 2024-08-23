@@ -12,9 +12,25 @@ public class FreeHinge : Contraption
 		rb.isKinematic = !isPlaying;
 
 		hingeJoint.connectedBody = transform.parent.GetComponentInParent<Rigidbody>();
-		if (!isPlaying)
+
+		if (isPlaying)
+		{
+			rb.mass = CalculateMass();
+		}
+		else
 		{
 			content.transform.localRotation = Quaternion.identity;
 		}
+	}
+
+	public override void SetMetaData(PartData data)
+	{
+		base.SetMetaData(data);
+		rb.mass = data.mass;
+	}
+
+	public override float CalculateMass()
+	{
+		return base.CalculateMass() + rb.mass;
 	}
 }

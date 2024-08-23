@@ -15,4 +15,5 @@ MonoBehaviour:
   Name: Free Hinge
   Icon: {fileID: 0}
   Prefab: {fileID: 2639465027856382258, guid: 55ba1dc1273547847beafc8c642ef097, type: 3}
+  mass: 1
   description: Free rotating hinge

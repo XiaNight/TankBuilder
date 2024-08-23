@@ -8,9 +8,10 @@ public class Builder : MonoBehaviour
 	#endregion
 
 	public Vehicle vehicle;
-	public Part selectionPrefab;
+	public PartData selectedPartData;
 
 	public LayerMask mountLayer;
+	public LayerMask buildFloorLayer;
 	private Part selectedInstance;
 	private int mountSelector = 0;
 
@@ -32,9 +33,9 @@ public class Builder : MonoBehaviour
 		// SetMountState
 		vehicle.rootContraption.SetMountState(Mount.State.Enabled);
 
-		if (selectionPrefab != null)
+		if (selectedPartData != null)
 		{
-			SetSelectionPrefab(selectionPrefab);
+			SetSelectedPartData(selectedPartData);
 		}
 	}
 
@@ -88,17 +89,20 @@ public class Builder : MonoBehaviour
 	private void CheckRayCast()
 	{
 		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-		if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, mountLayer))
+		if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, mountLayer + buildFloorLayer))
 		{
 			// because RayCastHit redirects hit.transform to the it's parent rigidbody,
 			// so using hit.collider to get the actual ray hit collider.
 			if (hit.collider.TryGetComponent(out Mount mountee))
 			{
 				// If clicked, and mounting is successful, build the instance
-				if (Input.GetMouseButtonDown(0) && TryMounting(mountee)) BuildInstanceOn(mountee);
+				if (Input.GetMouseButtonDown(0) && TryMounting(mountee))
+				{
+					BuildInstanceOn(mountee);
+				}
 
 				// If nothing changed, return
-				if (!isDirty && focusedMount == mountee) return;
+				// if (!isDirty && focusedMount == mountee) return;
 				focusedMount = mountee;
 
 				// Something changed, update the mounting position
@@ -108,7 +112,15 @@ public class Builder : MonoBehaviour
 			}
 			else
 			{
-				color = Color.yellow;
+				// if hit the build floor, move the selected instance to the hit point, and grid it to 0.25f
+				Vector3 pos = hit.point;
+				pos.x = Mathf.Round(pos.x * 4) * 0.25f;
+				pos.z = Mathf.Round(pos.z * 4) * 0.25f;
+				selectedInstance.transform.position = pos;
+
+				if (Input.GetMouseButtonDown(0)) Buildinstance(selectedInstance, vehicle.rootContraption);
+
+				color = Color.blue;
 			}
 			rayCastPos = hit.point;
 		}
@@ -122,27 +134,17 @@ public class Builder : MonoBehaviour
 
 	private void BuildInstanceOn(Mount mountOn)
 	{
-		Part mountOnPart = mountOn.GetParent();
-		Contraption parentContraption = mountOnPart.GetContraption();
-		if (parentContraption != null)
-		{
-			parentContraption.AddPart(selectedInstance);
-			selectedInstance = null;
-		}
-		else
-		{
-			Contraption root = mountOnPart.GetComponent<Contraption>();
-			if (root != null)
-			{
-				root.AddPart(selectedInstance);
-				selectedInstance = null;
-			}
-			else
-			{
-				Debug.LogError("Parent doesn't have Contraption component");
-			}
-		}
+		Contraption contraption = mountOn.GetParent().GetContraption();
 
+		if (contraption == null) contraption = vehicle.rootContraption;
+
+		Buildinstance(selectedInstance, contraption);
+	}
+
+	private void Buildinstance(Part part, Contraption contraption)
+	{
+		contraption.AddPart(part);
+		selectedInstance = null;
 		SpawnNewInstance();
 	}
 
@@ -187,9 +189,9 @@ public class Builder : MonoBehaviour
 
 	#endregion
 
-	public void SetSelectionPrefab(Part prefab)
+	public void SetSelectedPartData(PartData partData)
 	{
-		selectionPrefab = prefab;
+		selectedPartData = partData;
 		SpawnNewInstance();
 	}
 
@@ -197,7 +199,8 @@ public class Builder : MonoBehaviour
 	{
 		if (selectedInstance != null) Destroy(selectedInstance.gameObject);
 
-		selectedInstance = Instantiate(selectionPrefab);
+		selectedInstance = Instantiate(selectedPartData.Prefab);
+		selectedInstance.SetMetaData(selectedPartData);
 		selectedInstance.SetMountState(Mount.State.ShowOnly);
 		selectedInstance.transform.rotation = currentRotation;
 	}

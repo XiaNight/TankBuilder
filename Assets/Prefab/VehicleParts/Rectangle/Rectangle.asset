@@ -15,4 +15,5 @@ MonoBehaviour:
   Name: Rectangle
   Icon: {fileID: 0}
   Prefab: {fileID: 5185497867830633295, guid: 6ad74262ec6298b47bc89bdb8afaaff9, type: 3}
+  mass: 2
   description: A 2x1 Rectangle

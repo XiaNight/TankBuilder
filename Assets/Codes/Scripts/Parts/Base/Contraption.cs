@@ -69,4 +69,17 @@ public class Contraption : Part
 	{
 		return this;
 	}
+
+	public override float CalculateMass()
+	{
+		if (isMassCalculated) return calculatedMass;
+		float mass = 0;
+		foreach (Part part in parts)
+		{
+			mass += part.CalculateMass();
+		}
+		isMassCalculated = true;
+		calculatedMass = mass;
+		return calculatedMass;
+	}
 }

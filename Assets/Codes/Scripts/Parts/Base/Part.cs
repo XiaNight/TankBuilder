@@ -7,6 +7,10 @@ public class Part : MonoBehaviour
 	[SerializeField] private List<Collider> physicColliders = new();
 
 	public Contraption ParentContraption { get; private set; }
+	private PartData metaData;
+
+	protected bool isMassCalculated;
+	protected float calculatedMass;
 
 	public Collider[] GetColliders()
 	{
@@ -62,8 +66,39 @@ public class Part : MonoBehaviour
 		return matchingMounts.ToArray();
 	}
 
-	public virtual void RestoreOriginal()
-	{
+	public virtual void RestoreOriginal() { }
 
+	public virtual void SetMetaData(PartData data)
+	{
+		metaData = data;
 	}
+
+	public virtual float CalculateMass()
+	{
+		isMassCalculated = true;
+		calculatedMass = metaData.mass;
+		return calculatedMass;
+	}
+
+	#region Serialization
+
+	public virtual string Serialize()
+	{
+		return JsonUtility.ToJson(new SerializedData()
+		{
+			partDataHash = GetType().Name,
+			position = transform.position,
+			rotation = transform.rotation
+		});
+	}
+
+	[System.Serializable]
+	public struct SerializedData
+	{
+		public string partDataHash;
+		public Vector3 position;
+		public Quaternion rotation;
+	}
+
+	#endregion
 }
