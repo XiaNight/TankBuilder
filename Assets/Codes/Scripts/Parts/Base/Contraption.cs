@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using Newtonsoft.Json.Linq;
 using UnityEngine;
 
 public class Contraption : Part
@@ -79,4 +81,20 @@ public class Contraption : Part
 		}
 		return mass;
 	}
+
+	#region Serialization
+
+	public override JObject Serialize()
+	{
+		JObject data = base.Serialize();
+		JArray partsData = new();
+		foreach (Part part in parts)
+		{
+			partsData.Add(part.Serialize());
+		}
+		data.Add(nameof(parts), partsData);
+		return data;
+	}
+
+	#endregion
 }

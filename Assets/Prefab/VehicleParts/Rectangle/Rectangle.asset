@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a39ce6f9cf25fe243867bc4457e8a978, type: 3}
   m_Name: Rectangle
   m_EditorClassIdentifier: 
+  partId: general_rectangle
   Name: Rectangle
-  Icon: {fileID: 0}
-  Prefab: {fileID: 5185497867830633295, guid: 6ad74262ec6298b47bc89bdb8afaaff9, type: 3}
+  icon: {fileID: 0}
+  prefab: {fileID: 5185497867830633295, guid: 6ad74262ec6298b47bc89bdb8afaaff9, type: 3}
   mass: 2
   description: A 2x1 Rectangle

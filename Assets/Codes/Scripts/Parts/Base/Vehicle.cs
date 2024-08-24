@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Vehicle : MonoBehaviour
@@ -19,6 +20,9 @@ public class Vehicle : MonoBehaviour
 		if (isPlaying)
 		{
 			rb.mass = rootContraption.CalculateMass();
+			var jObject = rootContraption.Serialize();
+
+			Debug.Log(jObject.ToString());
 		}
 		else
 		{

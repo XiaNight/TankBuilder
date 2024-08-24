@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 public class Part : MonoBehaviour
 {
@@ -8,6 +10,8 @@ public class Part : MonoBehaviour
 	[SerializeField] private GameObject highlightVisual;
 
 	public Contraption ParentContraption { get; private set; }
+
+	// [PartSerialization("part_type", PartSerializationAttribute.Type.Hash)]
 	private PartData metaData;
 
 	public Collider[] GetColliders()
@@ -94,22 +98,18 @@ public class Part : MonoBehaviour
 
 	#region Serialization
 
-	public virtual string Serialize()
+	public virtual JObject Serialize()
 	{
-		return JsonUtility.ToJson(new SerializedData()
+		string type = metaData == null ? "root" : metaData.partId;
+		JObject data = new()
 		{
-			partDataHash = GetType().Name,
-			position = transform.position,
-			rotation = transform.rotation
-		});
-	}
+			["part_type"] = type,
+			["position"] = new JArray(new float[] { transform.position.x, transform.position.y, transform.position.z }),
+			["rotation"] = new JArray(new float[] { transform.rotation.x, transform.rotation.y, transform.rotation.z, transform.rotation.w }),
+			["scale"] = new JArray(new float[] { transform.localScale.x, transform.localScale.y, transform.localScale.z })
+		};
 
-	[System.Serializable]
-	public struct SerializedData
-	{
-		public string partDataHash;
-		public Vector3 position;
-		public Quaternion rotation;
+		return data;
 	}
 
 	#endregion

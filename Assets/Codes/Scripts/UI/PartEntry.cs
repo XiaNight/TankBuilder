@@ -11,33 +11,47 @@ public class PartEntry : MonoBehaviour
 	[SerializeField] private Button button;
 
 
-	public Part Part => part.Prefab;
+	public PartData PartData => part;
+	public Part Part => part.prefab;
+
+	public event System.Action OnClick;
 
 	private void OnValidate()
 	{
 		if (part == null) return;
-		SetData();
+		UpdateData();
 	}
 
 	private void Awake()
 	{
-		button.onClick.AddListener(OnClick);
+		button.onClick.AddListener(Select);
 	}
 
 	public void Start()
 	{
-		SetData();
+		UpdateData();
 	}
 
-	public void SetData()
+	public void SetPart(PartData partData)
 	{
-		image.sprite = part.Icon;
+		part = partData;
+		UpdateData();
+	}
+
+	public void UpdateData()
+	{
+		image.sprite = part.icon;
 		title.text = part.Name;
 		description.text = part.description;
 	}
 
-	public void OnClick()
+	public void Select()
 	{
-		Builder.Instance.SetSelectedPartData(part);
+		OnClick?.Invoke();
+	}
+
+	public void SetHighlight(bool isHighlighted)
+	{
+
 	}
 }

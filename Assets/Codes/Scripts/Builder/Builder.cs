@@ -247,7 +247,7 @@ public class Builder : MonoBehaviour
 	{
 		if (previewInstance != null) Destroy(previewInstance.gameObject);
 
-		previewInstance = Instantiate(selectedPartData.Prefab);
+		previewInstance = Instantiate(selectedPartData.prefab);
 		previewInstance.SetMetaData(selectedPartData);
 		previewInstance.SetMountState(Mount.State.ShowOnly);
 		previewInstance.SetColliderState(false);
