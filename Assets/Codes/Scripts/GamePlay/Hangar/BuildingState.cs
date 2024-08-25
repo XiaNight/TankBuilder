@@ -7,6 +7,7 @@ public class BuildingState : HangarManager.State
 	public BuildingState()
 	{
 		HangarManager.Instance.playerVehicle.SetPlayingMode(false);
+		Builder.Instance.Enable();
 		UpdateState();
 	}
 

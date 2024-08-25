@@ -92,21 +92,20 @@ public class HangarFreeCam : MonoBehaviour
             yMoveAction.Enable();
 #endif
 
-		// #if UNITY_EDITOR && !USE_INPUT_SYSTEM
-		// 		List<InputManagerEntry> inputEntries = new List<InputManagerEntry>();
+#if UNITY_EDITOR && !USE_INPUT_SYSTEM
+		List<InputManagerEntry> inputEntries = new()
+		{
+			// Add new bindings
+			new() { name = kRightStickX, kind = InputManagerEntry.Kind.Axis, axis = InputManagerEntry.Axis.Fourth, sensitivity = 1.0f, gravity = 1.0f, deadZone = 0.2f },
+			new() { name = kRightStickY, kind = InputManagerEntry.Kind.Axis, axis = InputManagerEntry.Axis.Fifth, sensitivity = 1.0f, gravity = 1.0f, deadZone = 0.2f, invert = true },
+			new() { name = kYAxis, kind = InputManagerEntry.Kind.KeyOrButton, btnPositive = "page up", altBtnPositive = "joystick button 5", btnNegative = "page down", altBtnNegative = "joystick button 4", gravity = 1000.0f, deadZone = 0.001f, sensitivity = 1000.0f },
+			new() { name = kYAxis, kind = InputManagerEntry.Kind.KeyOrButton, btnPositive = "q", btnNegative = "e", gravity = 1000.0f, deadZone = 0.001f, sensitivity = 1000.0f },
+			new() { name = kSpeedAxis, kind = InputManagerEntry.Kind.KeyOrButton, btnPositive = "home", btnNegative = "end", gravity = 1000.0f, deadZone = 0.001f, sensitivity = 1000.0f },
+			new() { name = kSpeedAxis, kind = InputManagerEntry.Kind.Axis, axis = InputManagerEntry.Axis.Seventh, gravity = 1000.0f, deadZone = 0.001f, sensitivity = 1000.0f }
+		};
 
-		// 		// Add new bindings
-		// 		inputEntries.Add(new InputManagerEntry { name = kRightStickX, kind = InputManagerEntry.Kind.Axis, axis = InputManagerEntry.Axis.Fourth, sensitivity = 1.0f, gravity = 1.0f, deadZone = 0.2f });
-		// 		inputEntries.Add(new InputManagerEntry { name = kRightStickY, kind = InputManagerEntry.Kind.Axis, axis = InputManagerEntry.Axis.Fifth, sensitivity = 1.0f, gravity = 1.0f, deadZone = 0.2f, invert = true });
-
-		// 		inputEntries.Add(new InputManagerEntry { name = kYAxis, kind = InputManagerEntry.Kind.KeyOrButton, btnPositive = "page up", altBtnPositive = "joystick button 5", btnNegative = "page down", altBtnNegative = "joystick button 4", gravity = 1000.0f, deadZone = 0.001f, sensitivity = 1000.0f });
-		// 		inputEntries.Add(new InputManagerEntry { name = kYAxis, kind = InputManagerEntry.Kind.KeyOrButton, btnPositive = "q", btnNegative = "e", gravity = 1000.0f, deadZone = 0.001f, sensitivity = 1000.0f });
-
-		// 		inputEntries.Add(new InputManagerEntry { name = kSpeedAxis, kind = InputManagerEntry.Kind.KeyOrButton, btnPositive = "home", btnNegative = "end", gravity = 1000.0f, deadZone = 0.001f, sensitivity = 1000.0f });
-		// 		inputEntries.Add(new InputManagerEntry { name = kSpeedAxis, kind = InputManagerEntry.Kind.Axis, axis = InputManagerEntry.Axis.Seventh, gravity = 1000.0f, deadZone = 0.001f, sensitivity = 1000.0f });
-
-		// 		InputRegistering.RegisterInputs(inputEntries);
-		// #endif
+		InputRegistering.RegisterInputs(inputEntries);
+#endif
 	}
 
 	float inputRotateAxisX, inputRotateAxisY;
@@ -147,10 +146,10 @@ public class HangarFreeCam : MonoBehaviour
 		leftShift = Input.GetKey(KeyCode.LeftShift);
 		fire1 = Input.GetAxis("Fire1") > 0.0f;
 
-		// inputChangeSpeed = Input.GetAxis(kSpeedAxis);
+		inputChangeSpeed = 0.000f;
 
-		// inputVertical = Input.GetAxis(kVertical);
-		// inputHorizontal = Input.GetAxis(kHorizontal);
+		inputVertical = Input.GetAxis(kVertical);
+		inputHorizontal = Input.GetAxis(kHorizontal);
 		// inputYAxis = Input.GetAxis(kYAxis);
 #endif
 	}

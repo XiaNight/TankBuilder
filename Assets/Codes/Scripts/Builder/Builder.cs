@@ -36,6 +36,20 @@ public class Builder : MonoBehaviour
 		else Destroy(gameObject);
 	}
 
+	public void Enable()
+	{
+		SpawnNewPreview();
+		gameObject.SetActive(true);
+	}
+
+	public void Disable()
+	{
+		if (previewInstance != null) Destroy(previewInstance.gameObject);
+		gameObject.SetActive(false);
+
+		if (highlightedPart != null) highlightedPart.SetHighlight(false);
+	}
+
 	private void Start()
 	{
 		// SetMountState
