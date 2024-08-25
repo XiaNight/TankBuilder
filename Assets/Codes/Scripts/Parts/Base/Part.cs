@@ -112,5 +112,27 @@ public class Part : MonoBehaviour
 		return data;
 	}
 
+	public virtual void Deserialize(JObject data)
+	{
+		Vector3 position = new(
+			data["position"][0].Value<float>(),
+			data["position"][1].Value<float>(),
+			data["position"][2].Value<float>()
+		);
+		Quaternion rotation = new(
+			data["rotation"][0].Value<float>(),
+			data["rotation"][1].Value<float>(),
+			data["rotation"][2].Value<float>(),
+			data["rotation"][3].Value<float>()
+		);
+
+		transform.SetPositionAndRotation(position, rotation);
+		transform.localScale = new Vector3(
+			data["scale"][0].Value<float>(),
+			data["scale"][1].Value<float>(),
+			data["scale"][2].Value<float>()
+		);
+	}
+
 	#endregion
 }

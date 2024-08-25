@@ -14,6 +14,8 @@ public class PartManager : MonoBehaviour
 		if (Instance == null) Instance = this;
 		else Destroy(gameObject);
 
+		DontDestroyOnLoad(gameObject);
+
 		foreach (PartData part in partList)
 		{
 			parts.Add(part.partId, part);

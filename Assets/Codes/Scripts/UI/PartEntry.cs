@@ -10,7 +10,6 @@ public class PartEntry : MonoBehaviour
 	[SerializeField] private TMP_Text description;
 	[SerializeField] private Button button;
 
-
 	public PartData PartData => part;
 	public Part Part => part.prefab;
 

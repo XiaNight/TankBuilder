@@ -1,5 +1,4 @@
-using System.Collections.Generic;
-using Unity.VisualScripting;
+using Newtonsoft.Json.Linq;
 using UnityEngine;
 
 public class Vehicle : MonoBehaviour
@@ -29,5 +28,19 @@ public class Vehicle : MonoBehaviour
 			transform.position = Vector3.zero;
 			transform.rotation = Quaternion.identity;
 		}
+	}
+
+	public string GetSerializedData()
+	{
+		return rootContraption.Serialize().ToString();
+	}
+
+	public void SetSerializedData(string data)
+	{
+		JObject jObject = JObject.Parse(data);
+
+		rootContraption.ClearParts();
+
+		rootContraption.Deserialize(jObject);
 	}
 }

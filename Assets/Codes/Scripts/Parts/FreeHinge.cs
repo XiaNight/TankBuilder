@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class FreeHinge : Contraption
 {
-	[SerializeField] private Rigidbody rb;
-	[SerializeField] private HingeJoint hingeJoint;
+	[SerializeField] protected Rigidbody rb;
+	[SerializeField] protected HingeJoint hingeJoint;
 
 	public override void SetPlayingState(bool isPlaying)
 	{

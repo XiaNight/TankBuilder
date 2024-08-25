@@ -1,5 +1,5 @@
-using System;
 using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
 
@@ -13,14 +13,6 @@ public class Contraption : Part
 	private void Reset()
 	{
 		content = transform;
-	}
-
-	private void Start()
-	{
-		foreach (Part part in parts)
-		{
-			part.SetContraption(this);
-		}
 	}
 
 	public override void SetPlayingState(bool isPlaying)
@@ -59,6 +51,15 @@ public class Contraption : Part
 		part.SetContraption(null);
 	}
 
+	public void ClearParts()
+	{
+		for (int i = parts.Count - 1; i >= 0; i--)
+		{
+			Destroy(parts[i].gameObject);
+		}
+		parts.Clear();
+	}
+
 	public override void RestoreOriginal()
 	{
 		foreach (Part part in parts)
@@ -94,6 +95,22 @@ public class Contraption : Part
 		}
 		data.Add(nameof(parts), partsData);
 		return data;
+	}
+
+	public override void Deserialize(JObject data)
+	{
+		base.Deserialize(data);
+
+		JArray partsData = (JArray)data[nameof(parts)];
+		foreach (JObject jData in partsData.Cast<JObject>())
+		{
+			string partType = jData["part_type"].Value<string>();
+			PartData partData = PartManager.Instance.parts[partType];
+			Part part = Instantiate(partData.prefab, content);
+			part.SetMetaData(partData);
+			AddPart(part);
+			part.Deserialize(jData);
+		}
 	}
 
 	#endregion
