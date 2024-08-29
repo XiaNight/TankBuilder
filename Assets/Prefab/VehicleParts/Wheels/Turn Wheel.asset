@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a39ce6f9cf25fe243867bc4457e8a978, type: 3}
+  m_Name: Turn Wheel
+  m_EditorClassIdentifier: 
+  partId: standard_turn_wheel
+  Name: Turn Wheel
+  icon: {fileID: 0}
+  prefab: {fileID: 2154942468288549865, guid: 74ba6b564aef1294ba65f194e3032143, type: 3}
+  mass: 1
+  description: A wheel that can steer.

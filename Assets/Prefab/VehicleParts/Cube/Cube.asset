@@ -15,6 +15,6 @@ MonoBehaviour:
   partId: general_cube
   Name: Cube
   icon: {fileID: 0}
-  prefab: {fileID: 1703761171694018346, guid: cd7ddd1d239949e47ab47c916ecadf02, type: 3}
-  mass: 1
+  prefab: {fileID: 3562477274587932894, guid: a8d587ebd052f9848a0a966cbcb3d765, type: 3}
+  mass: 50
   description: A cube

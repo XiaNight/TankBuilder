@@ -1,63 +1,136 @@
+using UnityEditor.EditorTools;
 using UnityEngine;
+using UnityEngine.Profiling;
 
 public class AimingPlatform : FreeHinge
 {
-	[SerializeField] private float P;
-	[SerializeField] private float I;
-	[SerializeField] private float D;
-	[SerializeField] private float preAmplitude;
+	[Header("Motor")]
+	[SerializeField] private float force;
+
+	[Tooltip("Max Speed in degrees per second")]
+	[SerializeField] private float maxSpeed;
+
+	[Header("PId Control")]
+	[SerializeField] private float angleToStop;
 	[SerializeField] private float postAmplitude;
-	private Vector3 localTargetDirection;
 
-	private PIDController pidController;
+	private Transform aimingTarget;
+	private Vector3 localTargetPosition;
 
-	private void OnValidate()
+	private new void Awake()
 	{
-		if (pidController != null)
-		{
-			pidController.pFactor = P;
-			pidController.iFactor = I;
-			pidController.dFactor = D;
-		}
-	}
-
-	private void Awake()
-	{
-		pidController = new PIDController(P, I, D);
+		base.Awake();
 	}
 
 	private void Update()
 	{
-		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-		if (Physics.Raycast(ray, out RaycastHit hit))
-		{
-			Vector3 target = hit.point;
-			localTargetDirection = content.InverseTransformDirection(target - transform.position);
-			localTargetDirection.y = 0;
-			localTargetDirection.Normalize();
-		}
+		if (!isPlaying) return;
+
+		UpdateAimingDirection();
 	}
 
 	private void FixedUpdate()
 	{
-		float forward = Vector3.Dot(localTargetDirection, Vector3.forward);
-		float right = Vector3.Dot(localTargetDirection, Vector3.right);
+		if (!isPlaying) return;
 
-		if (forward < 0) right = right < 0 ? -1 : 1;
-		right = Mathf.Clamp(right * preAmplitude, -1, 1);
+		//- Angle Calculation
+		float angle = Vector3.SignedAngle(Vector3.forward, localTargetPosition, Vector3.up);
 
+		//- Speed Calculation
+		float calculatedSpeed = Mathf.LerpUnclamped(0, maxSpeed, angle / angleToStop);
+		calculatedSpeed = Mathf.Clamp(calculatedSpeed, -maxSpeed, maxSpeed);
+
+		//- Set Motor Speed
 		JointMotor motor = hingeJoint.motor;
-		motor.targetVelocity = pidController.Update(0, -right, Time.fixedDeltaTime) * postAmplitude;
+		motor.targetVelocity = calculatedSpeed;
 		hingeJoint.motor = motor;
 	}
 
+	public static float CalculateStoppingRotation(float motorForce, float inertiaTensor, float initialAngularVelocity)
+	{
+		// Convert initial angular velocity from degrees per second to radians per second
+		float initialAngularVelocityRad = initialAngularVelocity * Mathf.Deg2Rad;
+
+		// Calculate angular deceleration (alpha)
+		float angularDeceleration = motorForce / inertiaTensor;
+
+		// Calculate time to stop (t)
+		float timeToStop = initialAngularVelocityRad / angularDeceleration;
+
+		// Calculate the stopping rotation (theta) in radians
+		float stoppingRotationRad = (initialAngularVelocityRad * timeToStop) - (0.5f * angularDeceleration * timeToStop * timeToStop);
+
+		// Convert stopping rotation from radians to degrees
+		float stoppingRotationDeg = stoppingRotationRad * Mathf.Rad2Deg;
+
+		return stoppingRotationDeg;
+	}
+
+	public override void SetPlayingState(bool isPlaying)
+	{
+		base.SetPlayingState(isPlaying);
+		if (isPlaying)
+		{
+			SetAimingTarget(AttachedVehicle.focusPoint);
+
+			//- Set Motor
+			JointMotor motor = hingeJoint.motor;
+			motor.force = force;
+			hingeJoint.motor = motor;
+
+			//- Calculate Stopping Rotation
+			Vector3 horizontalInertiaTensor = rb.inertiaTensor;
+			horizontalInertiaTensor.y = 0;
+
+			float inertia = horizontalInertiaTensor.magnitude;
+			float angleToStop = CalculateStoppingRotation(motor.force, inertia, maxSpeed);
+			this.angleToStop = angleToStop * 1.1f;
+			Debug.Log(angleToStop);
+		}
+	}
+
+	public void SetAimingTarget(Transform target) => aimingTarget = target;
+
+	private void UpdateAimingDirection()
+	{
+		if (aimingTarget == null) return;
+		localTargetPosition = content.InverseTransformPoint(aimingTarget.position);
+		localTargetPosition.y = 0;
+		localTargetPosition.Normalize();
+	}
+
+	private const float GIZMO_SIZE = 3f;
+	private const int GIZMO_CIRCLE_RESOLUTION = 15;
 	private void OnDrawGizmos()
 	{
-		Gizmos.color = Color.red;
-		Gizmos.DrawLine(content.position, content.position + content.TransformDirection(localTargetDirection));
+		if (!isPlaying) return;
 
+		//- Draw wired circle
+		Gizmos.color = Color.white;
+		for (int i = 0; i < 360; i += GIZMO_CIRCLE_RESOLUTION)
+		{
+			Vector3 pointA = CalcPoint(i);
+			Vector3 pointB = CalcPoint(i + GIZMO_CIRCLE_RESOLUTION);
+			Gizmos.DrawLine(pointA, pointB);
+		}
+
+		Vector3 CalcPoint(float angle) => content.position + new Vector3(Mathf.Sin(angle * Mathf.Deg2Rad) * GIZMO_SIZE, 0, Mathf.Cos(angle * Mathf.Deg2Rad) * GIZMO_SIZE);
+
+		//- Local Target Direction
+		Gizmos.color = Color.red;
+		Vector3 targetLocal = content.InverseTransformPoint(aimingTarget.position);
+		targetLocal.y = 0;
+		targetLocal = targetLocal.normalized * GIZMO_SIZE;
+		Gizmos.DrawLine(content.position, content.TransformPoint(targetLocal));
+
+		//- Forward
+		Vector3 forwardPoint = content.position + content.forward * GIZMO_SIZE;
 		Gizmos.color = Color.green;
-		Gizmos.DrawLine(content.position, content.position + content.forward * 5);
+		Gizmos.DrawLine(content.position, forwardPoint);
+
+		//- Force Direction
+		Gizmos.color = Color.cyan;
+		Gizmos.DrawLine(forwardPoint, forwardPoint + content.right * hingeJoint.motor.targetVelocity / 10);
 	}
 
 	public class PIDController

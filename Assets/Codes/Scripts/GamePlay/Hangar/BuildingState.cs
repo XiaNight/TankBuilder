@@ -9,6 +9,11 @@ public class BuildingState : HangarManager.State
 		HangarManager.Instance.playerVehicle.SetPlayingMode(false);
 		Builder.Instance.Enable();
 		UpdateState();
+
+		HangarManager.Instance.freeCam.enabled = true;
+		HangarManager.Instance.vehicleCamera.enabled = false;
+
+		Camera.main.transform.position = HangarManager.Instance.hangarCameraDefaultPosition.position;
 	}
 
 	public override void Update()

@@ -7,6 +7,8 @@ public class HangarManager : MonoBehaviour
 	public static HangarManager Instance { get; private set; }
 	public HangarFreeCam freeCam;
 	public Vehicle playerVehicle;
+	public VehicleCamera vehicleCamera;
+	public Transform hangarCameraDefaultPosition;
 	public State gameState;
 
 	private void Awake()

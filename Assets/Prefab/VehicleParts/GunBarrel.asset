@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a39ce6f9cf25fe243867bc4457e8a978, type: 3}
+  m_Name: GunBarrel
+  m_EditorClassIdentifier: 
+  partId: gun_barrel_90mm
+  Name: Gun Barrel 90mm
+  icon: {fileID: 0}
+  prefab: {fileID: 2404180612388559976, guid: bfdb0de397527194b9a4a6ba5a206451, type: 3}
+  mass: 800
+  description: 

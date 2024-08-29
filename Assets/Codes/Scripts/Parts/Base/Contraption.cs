@@ -39,8 +39,9 @@ public class Contraption : Part
 		if (!parts.Contains(part))
 			parts.Add(part);
 		part.transform.SetParent(content);
-		part.SetContraption(this);
+		part.SetAttachedContraption(this);
 		part.SetMountState(currentMountState);
+		part.SetAttachedVehicle(AttachedVehicle);
 	}
 
 	public void RemovePart(Part part)
@@ -48,7 +49,7 @@ public class Contraption : Part
 		if (parts.Contains(part))
 			parts.Remove(part);
 		part.transform.SetParent(null);
-		part.SetContraption(null);
+		part.SetAttachedContraption(null);
 	}
 
 	public void ClearParts()

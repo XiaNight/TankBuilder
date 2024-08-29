@@ -10,6 +10,8 @@ public class TestDriveState : HangarManager.State
 		vehicle.RestoreOriginal();
 
 		Builder.Instance.Disable();
+		HangarManager.Instance.freeCam.enabled = false;
+		HangarManager.Instance.vehicleCamera.enabled = true;
 	}
 
 	public override void Update()

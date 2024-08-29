@@ -3,7 +3,7 @@ using UnityEngine;
 public class FreeHinge : Contraption
 {
 	[SerializeField] protected Rigidbody rb;
-	[SerializeField] protected HingeJoint hingeJoint;
+	[SerializeField] protected new HingeJoint hingeJoint;
 
 	public override void SetPlayingState(bool isPlaying)
 	{
@@ -32,5 +32,13 @@ public class FreeHinge : Contraption
 	public override float CalculateMass()
 	{
 		return base.CalculateMass();
+	}
+
+	private void OnDrawGizmos()
+	{
+		Gizmos.color = Color.cyan;
+		Vector3 cog = content.TransformPoint(rb.centerOfMass);
+		Gizmos.DrawSphere(cog, 0.05f);
+		Gizmos.DrawLine(content.position, cog);
 	}
 }

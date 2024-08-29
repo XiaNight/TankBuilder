@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Mount : MonoBehaviour
 {
-	[SerializeField] private Collider collider;
+	[SerializeField] private new Collider collider;
 
 	public Part GetParent()
 	{

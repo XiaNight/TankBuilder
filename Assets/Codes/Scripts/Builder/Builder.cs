@@ -13,18 +13,14 @@ public class Builder : MonoBehaviour
 	public LayerMask mountLayer;
 	public LayerMask buildFloorLayer;
 	public LayerMask partLayer;
+	public LayerMask interactionLayer;
 
 	private Vector3 centerScreen;
-
-	//- Part Highlight
-	private Part highlightedPart;
 
 	//- Building
 	private Part previewInstance;
 	private int mountSelector = 0;
 	private Quaternion currentRotation = Quaternion.identity;
-	private Mount focusedMount = null;
-	private bool isDirty = false;
 
 	//- Debug
 	private Vector3 rayCastPos = new();
@@ -46,8 +42,6 @@ public class Builder : MonoBehaviour
 	{
 		if (previewInstance != null) Destroy(previewInstance.gameObject);
 		gameObject.SetActive(false);
-
-		if (highlightedPart != null) highlightedPart.SetHighlight(false);
 	}
 
 	private void Start()
@@ -65,13 +59,14 @@ public class Builder : MonoBehaviour
 
 	private void Update()
 	{
-		RayCastBuild();
-		RayCastPart();
+		Ray ray = Camera.main.ScreenPointToRay(centerScreen);
+
+		RayCastMounting(ray);
+		RayCastInteraction(ray);
 		CheckRotate();
 		if (Input.GetKeyDown(KeyCode.Tab))
 		{
 			mountSelector++;
-			isDirty = true;
 		}
 	}
 
@@ -79,22 +74,17 @@ public class Builder : MonoBehaviour
 	{
 		if (Input.GetKeyDown(KeyCode.Q))
 		{
-			previewInstance.transform.Rotate(0, 90, 0, Space.World);
+			previewInstance.transform.Rotate(90, 0, 0, Space.World);
 			currentRotation = previewInstance.transform.rotation;
 		}
 		else if (Input.GetKeyDown(KeyCode.E))
 		{
-			previewInstance.transform.Rotate(0, -90, 0, Space.World);
+			previewInstance.transform.Rotate(0, 90, 0, Space.World);
 			currentRotation = previewInstance.transform.rotation;
 		}
 		else if (Input.GetKeyDown(KeyCode.R))
 		{
 			previewInstance.transform.Rotate(0, 0, 90, Space.World);
-			currentRotation = previewInstance.transform.rotation;
-		}
-		else if (Input.GetKeyDown(KeyCode.F))
-		{
-			previewInstance.transform.Rotate(0, 0, -90, Space.World);
 			currentRotation = previewInstance.transform.rotation;
 		}
 	}
@@ -108,44 +98,11 @@ public class Builder : MonoBehaviour
 
 	#region Building
 
-	private void RayCastPart()
-	{
-		// Center Screen Ray Cast
-		Ray ray = Camera.main.ScreenPointToRay(centerScreen);
-		if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, partLayer))
-		{
-			if (hit.collider.GetComponentInParent<Part>() is Part part)
-			{
-				//- Highlight Part
-				if (highlightedPart != part)
-				{
-					if (highlightedPart != null) highlightedPart.SetHighlight(false);
-					highlightedPart = part;
-					highlightedPart.SetHighlight(true);
-				}
-
-				//- Remove Part
-				if (Input.GetMouseButtonDown(1))
-				{
-					Contraption contraption = part.GetContraption();
-					contraption.RemovePart(part);
-					Destroy(part.gameObject);
-				}
-				return;
-			}
-		}
-
-		//- Not hitting any part. Dehighlight the highlighted part.
-		if (highlightedPart != null) highlightedPart.SetHighlight(false);
-		highlightedPart = null;
-	}
-
 	/// <summary>
 	/// Check the raycast hit and try to mount the selected instance onto the mountee
 	/// </summary>
-	private void RayCastBuild()
+	private void RayCastMounting(in Ray ray)
 	{
-		Ray ray = Camera.main.ScreenPointToRay(centerScreen);
 		if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, mountLayer + buildFloorLayer))
 		{
 			// because RayCastHit redirects hit.transform to the it's parent rigidbody,
@@ -157,10 +114,6 @@ public class Builder : MonoBehaviour
 				{
 					BuildInstanceOn(mountee);
 				}
-
-				// If nothing changed, return
-				// if (!isDirty && focusedMount == mountee) return;
-				focusedMount = mountee;
 
 				// Something changed, update the mounting position
 				bool success = TryMounting(mountee);
@@ -193,6 +146,45 @@ public class Builder : MonoBehaviour
 		}
 	}
 
+	#region Interaction
+
+	private Part lastInteractedPart;
+
+	private void RayCastInteraction(in Ray ray)
+	{
+		if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, interactionLayer))
+		{
+			if (hit.collider.GetComponentInParent<Part>() is Part part)
+			{
+				//- Mouse Enter/Over/Exit
+				if (lastInteractedPart != part)
+				{
+					if (lastInteractedPart != null) lastInteractedPart.OnMouseExit();
+					part.OnMouseEnter();
+					lastInteractedPart = part;
+				}
+				part.OnMouseOver();
+
+				//- Remove Part
+				if (Input.GetMouseButtonDown(1))
+				{
+					Contraption contraption = part.GetContraption();
+					contraption.RemovePart(part);
+					Destroy(part.gameObject);
+				}
+
+				return;
+			}
+		}
+		if (lastInteractedPart != null)
+		{
+			lastInteractedPart.OnMouseExit();
+			lastInteractedPart = null;
+		}
+	}
+
+	#endregion
+
 	private void BuildInstanceOn(Mount mountOn)
 	{
 		Contraption contraption = mountOn.GetParent().GetContraption();
@@ -206,6 +198,7 @@ public class Builder : MonoBehaviour
 	{
 		contraption.AddPart(part);
 		part.SetColliderState(true);
+		part.SetInteractionCollidersState(true);
 		previewInstance = null;
 		SpawnNewPreview();
 	}
@@ -228,7 +221,7 @@ public class Builder : MonoBehaviour
 		Mount[] matchingMounts = previewInstance.FindMatchingMounts(mountee);
 		if (matchingMounts.Length == 0)
 		{
-			color = Color.red;
+			color = Color.cyan;
 			return null;
 		}
 		mountSelector %= matchingMounts.Length;
@@ -265,6 +258,7 @@ public class Builder : MonoBehaviour
 		previewInstance.SetMetaData(selectedPartData);
 		previewInstance.SetMountState(Mount.State.ShowOnly);
 		previewInstance.SetColliderState(false);
+		previewInstance.SetInteractionCollidersState(false);
 		previewInstance.transform.rotation = currentRotation;
 	}
 

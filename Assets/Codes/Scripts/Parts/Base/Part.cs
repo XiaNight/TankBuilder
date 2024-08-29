@@ -1,18 +1,34 @@
 using System.Collections.Generic;
 using UnityEngine;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System;
 
 public class Part : MonoBehaviour
 {
-	[SerializeField] private List<Mount> mounts = new();
-	[SerializeField] private List<Collider> physicColliders = new();
+	[Tooltip("Colliders for the main gameplay physics")]
+	[SerializeField] private GameObject physicCollidersContainer;
+
+	[Tooltip("Mounts for connecting parts")]
+	[SerializeField] private GameObject mountsContainer;
+
+	[Tooltip("Collider for user interaction")]
+	[SerializeField] private GameObject interactionColliders;
+
+	[Tooltip("Visual object for highlighting the part")]
 	[SerializeField] private GameObject highlightVisual;
 
-	public Contraption ParentContraption { get; private set; }
+	public Contraption AttachedContraption { get; private set; }
+	public Vehicle AttachedVehicle { get; private set; }
 
-	// [PartSerialization("part_type", PartSerializationAttribute.Type.Hash)]
-	private PartData metaData;
+	public bool isPlaying { get; private set; } = false;
+	protected List<Collider> physicColliders = new();
+	protected List<Mount> mounts = new();
+
+	protected void Awake()
+	{
+		if (mountsContainer != null) mounts = new List<Mount>(mountsContainer.GetComponentsInChildren<Mount>());
+		if (physicCollidersContainer != null) physicColliders = new List<Collider>(physicCollidersContainer.GetComponentsInChildren<Collider>());
+	}
 
 	public Collider[] GetColliders()
 	{
@@ -26,7 +42,16 @@ public class Part : MonoBehaviour
 
 	public virtual void SetPlayingState(bool isPlaying)
 	{
+		this.isPlaying = isPlaying;
 		SetMountState(isPlaying ? Mount.State.Disabled : Mount.State.Enabled);
+		if (isPlaying) SetHighlight(false);
+		SetInteractionCollidersState(!isPlaying);
+	}
+
+	public void SetInteractionCollidersState(bool state)
+	{
+		if (interactionColliders == null) return;
+		interactionColliders.SetActive(state);
 	}
 
 	public virtual void SetColliderState(bool isEnabled)
@@ -45,20 +70,28 @@ public class Part : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// This is not the same as AttachedContraption.
+	/// </summary>
 	public virtual Contraption GetContraption()
 	{
-		return ParentContraption;
+		return AttachedContraption;
 	}
 
-	public void SetContraption(Contraption contraption)
+	public void SetAttachedContraption(Contraption contraption)
 	{
-		if (ParentContraption != null)
+		if (AttachedContraption != null)
 		{
-			Contraption previousContraption = ParentContraption;
-			ParentContraption = null;
+			Contraption previousContraption = AttachedContraption;
+			AttachedContraption = null;
 			previousContraption.RemovePart(this);
 		}
-		ParentContraption = contraption;
+		AttachedContraption = contraption;
+	}
+
+	public void SetAttachedVehicle(Vehicle vehicle)
+	{
+		AttachedVehicle = vehicle;
 	}
 
 	public Mount[] FindMatchingMounts(Mount mount)
@@ -78,14 +111,23 @@ public class Part : MonoBehaviour
 
 	public virtual void RestoreOriginal() { }
 
+	#region Metadata
+
+	protected PartData MetaData { get; private set; }
+
+	public event Action<PartData> OnMetaDataChangedEvent;
+
 	public virtual void SetMetaData(PartData data)
 	{
-		metaData = data;
+		MetaData = data;
+		OnMetaDataChangedEvent?.Invoke(data);
 	}
+
+	#endregion
 
 	public virtual float CalculateMass()
 	{
-		if (metaData != null) return metaData.mass;
+		if (MetaData != null) return MetaData.mass;
 
 		return 0;
 	}
@@ -96,11 +138,36 @@ public class Part : MonoBehaviour
 		highlightVisual.SetActive(isHighlighted);
 	}
 
+	#region Interaction
+
+	public event Action OnMouseEnterEvent;
+	public event Action OnMouseExitEvent;
+	public event Action OnMouseOverEvent;
+
+	public virtual void OnMouseEnter()
+	{
+		OnMouseEnterEvent?.Invoke();
+		if (!isPlaying) SetHighlight(true);
+	}
+
+	public virtual void OnMouseExit()
+	{
+		OnMouseExitEvent?.Invoke();
+		if (!isPlaying) SetHighlight(false);
+	}
+
+	public virtual void OnMouseOver()
+	{
+		OnMouseOverEvent?.Invoke();
+	}
+
+	#endregion
+
 	#region Serialization
 
 	public virtual JObject Serialize()
 	{
-		string type = metaData == null ? "root" : metaData.partId;
+		string type = MetaData == null ? "root" : MetaData.partId;
 		JObject data = new()
 		{
 			["part_type"] = type,
