@@ -1649,9 +1649,15 @@ MonoBehaviour:
   parts: []
   rb: {fileID: 8682577802649351617}
   hingeJoint: {fileID: 6970594701271674189}
-  force: 6000
+  forceField:
+    key: Turning Force
+    value: 6000
+    minimumClamping: 1
+    minValue: 3000
+    maximumClamping: 1
+    maxValue: 12000
   maxSpeed: 30
-  preAmplitude: 1
+  angleToStop: 0
   postAmplitude: 1
 --- !u!4 &4540870735258623047 stripped
 Transform:

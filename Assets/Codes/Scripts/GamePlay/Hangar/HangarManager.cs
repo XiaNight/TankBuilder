@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class HangarManager : MonoBehaviour
@@ -9,7 +8,12 @@ public class HangarManager : MonoBehaviour
 	public Vehicle playerVehicle;
 	public VehicleCamera vehicleCamera;
 	public Transform hangarCameraDefaultPosition;
-	public State gameState;
+	public PartList partList;
+
+	[SerializeField] private TMP_Text modeText;
+	private State gameState;
+
+	public void SetModeText(string text) => modeText.text = text;
 
 	private void Awake()
 	{
@@ -19,7 +23,7 @@ public class HangarManager : MonoBehaviour
 
 	private void Start()
 	{
-		gameState = new BuildingState();
+		SetGameState(new BuildingState());
 		freeCam = FindObjectOfType<HangarFreeCam>();
 	}
 
@@ -28,8 +32,22 @@ public class HangarManager : MonoBehaviour
 		gameState.Update();
 	}
 
+	public void SetGameState(State state)
+	{
+		gameState?.OnDisable();
+		State lastState = gameState;
+		gameState = state;
+		gameState.OnEnable(this, lastState);
+	}
+
 	public class State
 	{
+		protected HangarManager hangar;
 		public virtual void Update() { }
+		public virtual void OnEnable(HangarManager hangarManager, State lastState)
+		{
+			hangar = hangarManager;
+		}
+		public virtual void OnDisable() { }
 	}
 }

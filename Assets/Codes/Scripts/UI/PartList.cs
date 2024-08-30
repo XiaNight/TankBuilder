@@ -1,4 +1,4 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,6 +6,8 @@ public class PartList : MonoBehaviour
 {
 	public PartEntry partEntryPrefab;
 	public Transform partListParent;
+
+	public event Action<PartData> OnPartSelectedEvent;
 
 	private List<PartEntry> spawnedEntries = new();
 	private int selectedEntryIndex = 0;
@@ -45,10 +47,15 @@ public class PartList : MonoBehaviour
 		}
 	}
 
+	public PartData GetSelectedPartData()
+	{
+		return spawnedEntries[selectedEntryIndex].PartData;
+	}
+
 	private void OnPartSelected(int index)
 	{
 		selectedEntryIndex = index;
-		Builder.Instance.SetSelectedPartData(spawnedEntries[selectedEntryIndex].PartData);
+		OnPartSelectedEvent?.Invoke(spawnedEntries[selectedEntryIndex].PartData);
 		UpdateHighlight();
 	}
 

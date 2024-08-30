@@ -1,17 +1,25 @@
 using UnityEngine;
 
+/// <summary>
+/// A state that the player is test driving the vehicle.
+/// </summary>
 public class TestDriveState : HangarManager.State
 {
-	public TestDriveState()
+	public override void OnEnable(HangarManager hangarManager, HangarManager.State lastState)
 	{
-		Vehicle vehicle = HangarManager.Instance.playerVehicle;
+		base.OnEnable(hangarManager, lastState);
+
+		hangar.SetModeText("Test Drive Mode");
+
+		Vehicle vehicle = hangar.playerVehicle;
 		vehicle.SetPlayingMode(true);
 		vehicle.transform.SetPositionAndRotation(new Vector3(0, 0, 0), Quaternion.identity);
 		vehicle.RestoreOriginal();
 
 		Builder.Instance.Disable();
-		HangarManager.Instance.freeCam.enabled = false;
-		HangarManager.Instance.vehicleCamera.enabled = true;
+		hangar.freeCam.enabled = false;
+		hangar.vehicleCamera.enabled = true;
+		hangar.partList.enabled = false;
 	}
 
 	public override void Update()
@@ -20,7 +28,7 @@ public class TestDriveState : HangarManager.State
 
 		if (Input.GetKeyDown(KeyCode.Escape))
 		{
-			HangarManager.Instance.gameState = new BuildingState();
+			hangar.SetGameState(new BuildingState());
 		}
 	}
 }

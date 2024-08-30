@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class Builder : MonoBehaviour
@@ -21,6 +21,13 @@ public class Builder : MonoBehaviour
 	private Part previewInstance;
 	private int mountSelector = 0;
 	private Quaternion currentRotation = Quaternion.identity;
+	private bool isBuilding = true;
+
+	public event Action<Part> OnPartInteractionEnter;
+	public event Action<Part> OnPartInteractionExit;
+	public event Action<Part> OnPartInteractionHover;
+	public event Action<Part, KeyCode> OnPartOverKeyPressed;
+	public event Action<Part, int> OnPartMousePressed;
 
 	//- Debug
 	private Vector3 rayCastPos = new();
@@ -40,7 +47,7 @@ public class Builder : MonoBehaviour
 
 	public void Disable()
 	{
-		if (previewInstance != null) Destroy(previewInstance.gameObject);
+		RemovePreview();
 		gameObject.SetActive(false);
 	}
 
@@ -61,12 +68,15 @@ public class Builder : MonoBehaviour
 	{
 		Ray ray = Camera.main.ScreenPointToRay(centerScreen);
 
-		RayCastMounting(ray);
 		RayCastInteraction(ray);
-		CheckRotate();
-		if (Input.GetKeyDown(KeyCode.Tab))
+		if (isBuilding)
 		{
-			mountSelector++;
+			RayCastMounting(ray);
+			CheckRotate();
+			if (Input.GetKeyDown(KeyCode.Tab))
+			{
+				mountSelector++;
+			}
 		}
 	}
 
@@ -103,6 +113,7 @@ public class Builder : MonoBehaviour
 	/// </summary>
 	private void RayCastMounting(in Ray ray)
 	{
+		if (previewInstance == null) return;
 		if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, mountLayer + buildFloorLayer))
 		{
 			// because RayCastHit redirects hit.transform to the it's parent rigidbody,
@@ -130,6 +141,7 @@ public class Builder : MonoBehaviour
 				previewInstance.transform.position = pos;
 
 				if (Input.GetMouseButtonDown(0)) Buildinstance(previewInstance, vehicle.rootContraption);
+				if (Input.GetMouseButtonDown(1)) RemovePreview();
 
 				color = Color.blue;
 			}
@@ -145,45 +157,6 @@ public class Builder : MonoBehaviour
 			color = Color.blue;
 		}
 	}
-
-	#region Interaction
-
-	private Part lastInteractedPart;
-
-	private void RayCastInteraction(in Ray ray)
-	{
-		if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, interactionLayer))
-		{
-			if (hit.collider.GetComponentInParent<Part>() is Part part)
-			{
-				//- Mouse Enter/Over/Exit
-				if (lastInteractedPart != part)
-				{
-					if (lastInteractedPart != null) lastInteractedPart.OnMouseExit();
-					part.OnMouseEnter();
-					lastInteractedPart = part;
-				}
-				part.OnMouseOver();
-
-				//- Remove Part
-				if (Input.GetMouseButtonDown(1))
-				{
-					Contraption contraption = part.GetContraption();
-					contraption.RemovePart(part);
-					Destroy(part.gameObject);
-				}
-
-				return;
-			}
-		}
-		if (lastInteractedPart != null)
-		{
-			lastInteractedPart.OnMouseExit();
-			lastInteractedPart = null;
-		}
-	}
-
-	#endregion
 
 	private void BuildInstanceOn(Mount mountOn)
 	{
@@ -244,15 +217,84 @@ public class Builder : MonoBehaviour
 
 	#endregion
 
+	#region Interaction
+
+	private Part lastInteractedPart;
+
+	private void RayCastInteraction(in Ray ray)
+	{
+		if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, interactionLayer))
+		{
+			if (hit.collider.GetComponentInParent<Part>() is Part part)
+			{
+				//- Mouse Enter/Over/Exit
+				if (lastInteractedPart != part)
+				{
+					if (lastInteractedPart != null)
+					{
+						OnPartInteractionExit?.Invoke(lastInteractedPart);
+						lastInteractedPart.OnMouseExit();
+					}
+					OnPartInteractionEnter?.Invoke(part);
+					part.OnMouseEnter();
+					lastInteractedPart = part;
+				}
+				part.OnMouseOver();
+
+				//- Mouse Over Key Pressed
+				if (Input.anyKeyDown) OnPartOverKeyPressed?.Invoke(part, Event.current.keyCode);
+				if (Input.GetMouseButtonDown(0)) OnPartMousePressed?.Invoke(part, 0);
+				if (Input.GetMouseButtonDown(1)) OnPartMousePressed?.Invoke(part, 1);
+				if (Input.GetMouseButtonDown(2)) OnPartMousePressed?.Invoke(part, 2);
+
+				//- Remove Part
+				if (isBuilding && Input.GetMouseButtonDown(1))
+				{
+					Contraption contraption = part.GetContraption();
+					contraption.RemovePart(part);
+					Destroy(part.gameObject);
+				}
+
+				return;
+			}
+		}
+		if (lastInteractedPart != null)
+		{
+			OnPartInteractionExit?.Invoke(lastInteractedPart);
+			lastInteractedPart.OnMouseExit();
+			lastInteractedPart = null;
+		}
+	}
+
+	#endregion
+
+	public void SetBuildingState(bool isBuilding)
+	{
+		this.isBuilding = isBuilding;
+		if (!isBuilding)
+		{
+			RemovePreview();
+		}
+		else
+		{
+			SpawnNewPreview();
+		}
+	}
+
 	public void SetSelectedPartData(PartData partData)
 	{
 		selectedPartData = partData;
 		SpawnNewPreview();
 	}
 
-	private void SpawnNewPreview()
+	public void RemovePreview()
 	{
 		if (previewInstance != null) Destroy(previewInstance.gameObject);
+	}
+
+	private void SpawnNewPreview()
+	{
+		RemovePreview();
 
 		previewInstance = Instantiate(selectedPartData.prefab);
 		previewInstance.SetMetaData(selectedPartData);

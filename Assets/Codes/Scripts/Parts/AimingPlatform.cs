@@ -1,11 +1,11 @@
-using UnityEditor.EditorTools;
+using System.Collections.Generic;
+using Newtonsoft.Json.Linq;
 using UnityEngine;
-using UnityEngine.Profiling;
 
 public class AimingPlatform : FreeHinge
 {
 	[Header("Motor")]
-	[SerializeField] private float force;
+	[SerializeField] private FloatSettingField forceField;
 
 	[Tooltip("Max Speed in degrees per second")]
 	[SerializeField] private float maxSpeed;
@@ -48,6 +48,7 @@ public class AimingPlatform : FreeHinge
 
 	public static float CalculateStoppingRotation(float motorForce, float inertiaTensor, float initialAngularVelocity)
 	{
+		inertiaTensor = Mathf.Max(inertiaTensor, 1f);
 		// Convert initial angular velocity from degrees per second to radians per second
 		float initialAngularVelocityRad = initialAngularVelocity * Mathf.Deg2Rad;
 
@@ -75,7 +76,7 @@ public class AimingPlatform : FreeHinge
 
 			//- Set Motor
 			JointMotor motor = hingeJoint.motor;
-			motor.force = force;
+			motor.force = forceField.Value;
 			hingeJoint.motor = motor;
 
 			//- Calculate Stopping Rotation
@@ -98,6 +99,35 @@ public class AimingPlatform : FreeHinge
 		localTargetPosition.y = 0;
 		localTargetPosition.Normalize();
 	}
+
+	public override List<ISettingField> OpenSettings()
+	{
+		List<ISettingField> baseFields = base.OpenSettings();
+
+		SettingField<float> forceSetting = new(forceField.Key, forceField.Value);
+		forceSetting.OnValueChangedEvent += forceField.SetValue;
+
+		baseFields.Add(forceField);
+
+		return baseFields;
+	}
+
+	#region Serialization
+
+	public override JObject Serialize()
+	{
+		JObject data = base.Serialize();
+		data[forceField.Key] = forceField.Value;
+		return data;
+	}
+
+	public override void Deserialize(JObject data)
+	{
+		base.Deserialize(data);
+		forceField.SetValue(TryParseData<float>(data, forceField.Key));
+	}
+
+	#endregion
 
 	private const float GIZMO_SIZE = 3f;
 	private const int GIZMO_CIRCLE_RESOLUTION = 15;

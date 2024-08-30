@@ -138,6 +138,11 @@ public class Part : MonoBehaviour
 		highlightVisual.SetActive(isHighlighted);
 	}
 
+	public virtual List<ISettingField> OpenSettings()
+	{
+		return new List<ISettingField>();
+	}
+
 	#region Interaction
 
 	public event Action OnMouseEnterEvent;
@@ -199,6 +204,15 @@ public class Part : MonoBehaviour
 			data["scale"][1].Value<float>(),
 			data["scale"][2].Value<float>()
 		);
+	}
+
+	protected static T TryParseData<T>(JObject data, string key)
+	{
+		if (data.TryGetValue(key, out JToken value))
+		{
+			return value.Value<T>();
+		}
+		return default;
 	}
 
 	#endregion
