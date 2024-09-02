@@ -7,11 +7,15 @@ public class Wheel : Part
 	public float power = 10;
 	public float steer = 10;
 	public float brake = 10;
+	public float smoothSteerFactor = 5;
 	public WheelCollider wheelCollider;
 	public Transform wheelTransform;
 
 	private Part part;
 	private int directionMultiplier = 1;
+
+	private float targetSteeringAngle;
+	private float currentSteeringAngle;
 
 	private new void Awake()
 	{
@@ -47,10 +51,18 @@ public class Wheel : Part
 		float forward = Input.GetKey(KeyCode.W) ? 1 : Input.GetKey(KeyCode.S) ? -1 : 0;
 		wheelCollider.motorTorque = forward * power * directionMultiplier;
 		wheelCollider.wheelDampingRate = Input.GetKey(KeyCode.Space) ? brake / wheelCollider.rpm : 0;
-		wheelCollider.steerAngle = Input.GetKey(KeyCode.A) ? -steer : Input.GetKey(KeyCode.D) ? steer : 0;
+		targetSteeringAngle = Input.GetKey(KeyCode.A) ? -steer : Input.GetKey(KeyCode.D) ? steer : 0;
 
 		wheelCollider.GetWorldPose(out Vector3 position, out Quaternion rotation);
 		wheelTransform.SetPositionAndRotation(position, rotation);
+	}
+
+	private void FixedUpdate()
+	{
+		if (!part.isPlaying) return;
+
+		currentSteeringAngle = Mathf.Lerp(currentSteeringAngle, targetSteeringAngle, Time.fixedDeltaTime * smoothSteerFactor);
+		wheelCollider.steerAngle = currentSteeringAngle;
 	}
 
 	public override void OnMouseOver()
@@ -60,8 +72,6 @@ public class Wheel : Part
 			directionMultiplier *= -1;
 			print("Direction Multiplier: " + directionMultiplier);
 		}
-
-		Debug.Log("OnMouseOver");
 	}
 
 	private void OnDrawGizmos()

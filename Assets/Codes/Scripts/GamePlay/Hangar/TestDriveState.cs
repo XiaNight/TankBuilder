@@ -13,7 +13,7 @@ public class TestDriveState : HangarManager.State
 
 		Vehicle vehicle = hangar.playerVehicle;
 		vehicle.SetPlayingMode(true);
-		vehicle.transform.SetPositionAndRotation(new Vector3(0, 0, 0), Quaternion.identity);
+		vehicle.transform.SetLocalPositionAndRotation(new Vector3(0, 0, 0), Quaternion.identity);
 		vehicle.RestoreOriginal();
 
 		Builder.Instance.Disable();

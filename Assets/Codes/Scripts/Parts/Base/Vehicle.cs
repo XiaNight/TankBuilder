@@ -14,6 +14,11 @@ public class Vehicle : MonoBehaviour
 		rootContraption.SetAttachedVehicle(this);
 	}
 
+	private void OnCollisionStay(Collision collision)
+	{
+		Debug.Log("Stay");
+	}
+
 	public void RestoreOriginal()
 	{
 		rootContraption.RestoreOriginal();
@@ -27,22 +32,22 @@ public class Vehicle : MonoBehaviour
 		if (isPlaying)
 		{
 			rb.mass = rootContraption.CalculateMass();
-			var jObject = rootContraption.Serialize();
-
-			Debug.Log(jObject.ToString());
 
 			// Calculate bounds center
-			Bounds bounds = new();
 			Collider[] colliders = GetComponentsInChildren<Collider>();
-			foreach (Collider collider in colliders)
+			if (colliders.Length > 0)
 			{
-				bounds.Encapsulate(collider.bounds);
+				Bounds bounds = colliders[0].bounds;
+				foreach (Collider collider in colliders)
+				{
+					bounds.Encapsulate(collider.bounds);
+				}
+				OnCalculateBounds.Invoke(bounds);
 			}
-			OnCalculateBounds.Invoke(bounds);
 		}
 		else
 		{
-			transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
+			transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
 		}
 	}
 

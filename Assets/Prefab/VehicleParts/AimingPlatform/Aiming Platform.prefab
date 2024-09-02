@@ -1645,6 +1645,7 @@ MonoBehaviour:
   mountsContainer: {fileID: 1953120320933712021}
   interactionColliders: {fileID: 8455832950597655110}
   highlightVisual: {fileID: 7660095018688401378}
+  rotationRestriction: 0
   content: {fileID: 2389471253511475013}
   parts: []
   rb: {fileID: 8682577802649351617}
@@ -1656,7 +1657,30 @@ MonoBehaviour:
     minValue: 3000
     maximumClamping: 1
     maxValue: 12000
-  maxSpeed: 30
+  limitRotation:
+    key: Limit Rotation
+    value: 0
+  negetiveRotationLimit:
+    key: Negetive Rotation
+    value: 0
+    minimumClamping: 1
+    minValue: 180
+    maximumClamping: 1
+    maxValue: 0
+  positiveRotationLimit:
+    key: Positive Rotation
+    value: 0
+    minimumClamping: 1
+    minValue: 0
+    maximumClamping: 1
+    maxValue: 180
+  maxSpeedField:
+    key: Max Speed
+    value: 30
+    minimumClamping: 1
+    minValue: 0
+    maximumClamping: 1
+    maxValue: 180
   angleToStop: 0
   postAmplitude: 1
 --- !u!4 &4540870735258623047 stripped

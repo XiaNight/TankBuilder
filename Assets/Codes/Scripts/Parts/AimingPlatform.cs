@@ -6,9 +6,12 @@ public class AimingPlatform : FreeHinge
 {
 	[Header("Motor")]
 	[SerializeField] private FloatSettingField forceField;
+	[SerializeField] private BoolSettingField limitRotation;
+	[SerializeField] private FloatSettingField negetiveRotationLimit;
+	[SerializeField] private FloatSettingField positiveRotationLimit;
 
 	[Tooltip("Max Speed in degrees per second")]
-	[SerializeField] private float maxSpeed;
+	[SerializeField] private FloatSettingField maxSpeedField;
 
 	[Header("PId Control")]
 	[SerializeField] private float angleToStop;
@@ -37,8 +40,8 @@ public class AimingPlatform : FreeHinge
 		float angle = Vector3.SignedAngle(Vector3.forward, localTargetPosition, Vector3.up);
 
 		//- Speed Calculation
-		float calculatedSpeed = Mathf.LerpUnclamped(0, maxSpeed, angle / angleToStop);
-		calculatedSpeed = Mathf.Clamp(calculatedSpeed, -maxSpeed, maxSpeed);
+		float calculatedSpeed = Mathf.LerpUnclamped(0, maxSpeedField.Value, angle / angleToStop);
+		calculatedSpeed = Mathf.Clamp(calculatedSpeed, -maxSpeedField.Value, maxSpeedField.Value);
 
 		//- Set Motor Speed
 		JointMotor motor = hingeJoint.motor;
@@ -79,14 +82,18 @@ public class AimingPlatform : FreeHinge
 			motor.force = forceField.Value;
 			hingeJoint.motor = motor;
 
+			//- Set Limits
+			hingeJoint.useLimits = limitRotation.Value;
+			hingeJoint.limits = new JointLimits { min = negetiveRotationLimit.Value, max = positiveRotationLimit.Value };
+
 			//- Calculate Stopping Rotation
 			Vector3 horizontalInertiaTensor = rb.inertiaTensor;
 			horizontalInertiaTensor.y = 0;
 
 			float inertia = horizontalInertiaTensor.magnitude;
-			float angleToStop = CalculateStoppingRotation(motor.force, inertia, maxSpeed);
+			float angleToStop = CalculateStoppingRotation(motor.force, inertia, maxSpeedField.Value);
+			angleToStop = Mathf.Max(angleToStop, 1);
 			this.angleToStop = angleToStop * 1.1f;
-			Debug.Log(angleToStop);
 		}
 	}
 
@@ -107,7 +114,24 @@ public class AimingPlatform : FreeHinge
 		SettingField<float> forceSetting = new(forceField.Key, forceField.Value);
 		forceSetting.OnValueChangedEvent += forceField.SetValue;
 
+		SettingField<bool> limitRotationSetting = new(limitRotation.Key, limitRotation.Value);
+		limitRotationSetting.OnValueChangedEvent += limitRotation.SetValue;
+
+		SettingField<float> negetiveRotationLimitSetting = new(negetiveRotationLimit.Key, negetiveRotationLimit.Value);
+		negetiveRotationLimitSetting.OnValueChangedEvent += negetiveRotationLimit.SetValue;
+
+		SettingField<float> positiveRotationLimitSetting = new(positiveRotationLimit.Key, positiveRotationLimit.Value);
+		positiveRotationLimitSetting.OnValueChangedEvent += positiveRotationLimit.SetValue;
+
+		SettingField<float> maxSpeedSetting = new(maxSpeedField.Key, maxSpeedField.Value);
+		maxSpeedSetting.OnValueChangedEvent += maxSpeedField.SetValue;
+
+
 		baseFields.Add(forceField);
+		baseFields.Add(limitRotation);
+		baseFields.Add(negetiveRotationLimit);
+		baseFields.Add(positiveRotationLimit);
+		baseFields.Add(maxSpeedField);
 
 		return baseFields;
 	}
@@ -118,6 +142,10 @@ public class AimingPlatform : FreeHinge
 	{
 		JObject data = base.Serialize();
 		data[forceField.Key] = forceField.Value;
+		data[limitRotation.Key] = limitRotation.Value;
+		data[negetiveRotationLimit.Key] = negetiveRotationLimit.Value;
+		data[positiveRotationLimit.Key] = positiveRotationLimit.Value;
+		data[maxSpeedField.Key] = maxSpeedField.Value;
 		return data;
 	}
 
@@ -125,6 +153,9 @@ public class AimingPlatform : FreeHinge
 	{
 		base.Deserialize(data);
 		forceField.SetValue(TryParseData<float>(data, forceField.Key));
+		negetiveRotationLimit.SetValue(TryParseData<float>(data, negetiveRotationLimit.Key));
+		positiveRotationLimit.SetValue(TryParseData<float>(data, positiveRotationLimit.Key));
+		maxSpeedField.SetValue(TryParseData<float>(data, maxSpeedField.Key));
 	}
 
 	#endregion
@@ -137,14 +168,15 @@ public class AimingPlatform : FreeHinge
 
 		//- Draw wired circle
 		Gizmos.color = Color.white;
-		for (int i = 0; i < 360; i += GIZMO_CIRCLE_RESOLUTION)
+		for (float i = negetiveRotationLimit.Value; i < positiveRotationLimit.Value; i += GIZMO_CIRCLE_RESOLUTION)
 		{
-			Vector3 pointA = CalcPoint(i);
-			Vector3 pointB = CalcPoint(i + GIZMO_CIRCLE_RESOLUTION);
+			float angle = i;
+			Vector3 pointA = CalcPoint(angle);
+			Vector3 pointB = CalcPoint(angle + GIZMO_CIRCLE_RESOLUTION);
 			Gizmos.DrawLine(pointA, pointB);
 		}
 
-		Vector3 CalcPoint(float angle) => content.position + new Vector3(Mathf.Sin(angle * Mathf.Deg2Rad) * GIZMO_SIZE, 0, Mathf.Cos(angle * Mathf.Deg2Rad) * GIZMO_SIZE);
+		Vector3 CalcPoint(float angle) => content.TransformPoint(new Vector3(Mathf.Sin(angle * Mathf.Deg2Rad) * GIZMO_SIZE, 0, Mathf.Cos(angle * Mathf.Deg2Rad) * GIZMO_SIZE));
 
 		//- Local Target Direction
 		Gizmos.color = Color.red;

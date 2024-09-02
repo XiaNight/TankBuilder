@@ -3,7 +3,12 @@ guid: 424674f95cb479e49ab6492d765fde05
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - collider: {instanceID: 0}
+  - renderer: {instanceID: 0}
+  - normalMaterial: {fileID: 2100000, guid: b587159ac9ac51c41ad46694819dbf2d, type: 2}
+  - buildOnlyMaterial: {fileID: 2100000, guid: ddf7eff6b2c3c314d9ebbfc88cd837b2, type: 2}
+  - mountOnlyMaterial: {fileID: 2100000, guid: 694487cfb7888884aa31cab42cfe5951, type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

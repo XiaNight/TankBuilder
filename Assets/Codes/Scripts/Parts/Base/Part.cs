@@ -17,12 +17,17 @@ public class Part : MonoBehaviour
 	[Tooltip("Visual object for highlighting the part")]
 	[SerializeField] private GameObject highlightVisual;
 
+	[SerializeField]
+	private RotationRestriction rotationRestriction = RotationRestriction.None;
+
 	public Contraption AttachedContraption { get; private set; }
 	public Vehicle AttachedVehicle { get; private set; }
 
 	public bool isPlaying { get; private set; } = false;
 	protected List<Collider> physicColliders = new();
 	protected List<Mount> mounts = new();
+
+	public Mount[] Mounts => mounts.ToArray();
 
 	protected void Awake()
 	{
@@ -94,9 +99,8 @@ public class Part : MonoBehaviour
 		AttachedVehicle = vehicle;
 	}
 
-	public Mount[] FindMatchingMounts(Mount mount)
+	public Mount[] FindMatchingMounts(Vector3 mountDir)
 	{
-		Vector3 mountDir = mount.transform.forward;
 		List<Mount> matchingMounts = new();
 		foreach (Mount m in mounts)
 		{
@@ -173,11 +177,14 @@ public class Part : MonoBehaviour
 	public virtual JObject Serialize()
 	{
 		string type = MetaData == null ? "root" : MetaData.partId;
+		Vector3 localPosition = AttachedVehicle.transform.InverseTransformPoint(transform.position);
+		Quaternion localRotation = Quaternion.Inverse(AttachedVehicle.transform.rotation) * transform.rotation;
+
 		JObject data = new()
 		{
 			["part_type"] = type,
-			["position"] = new JArray(new float[] { transform.position.x, transform.position.y, transform.position.z }),
-			["rotation"] = new JArray(new float[] { transform.rotation.x, transform.rotation.y, transform.rotation.z, transform.rotation.w }),
+			["position"] = new JArray(new float[] { localPosition.x, localPosition.y, localPosition.z }),
+			["rotation"] = new JArray(new float[] { localRotation.x, localRotation.y, localRotation.z, localRotation.w }),
 			["scale"] = new JArray(new float[] { transform.localScale.x, transform.localScale.y, transform.localScale.z })
 		};
 
@@ -191,12 +198,15 @@ public class Part : MonoBehaviour
 			data["position"][1].Value<float>(),
 			data["position"][2].Value<float>()
 		);
+		position = AttachedVehicle.transform.TransformPoint(position);
+
 		Quaternion rotation = new(
 			data["rotation"][0].Value<float>(),
 			data["rotation"][1].Value<float>(),
 			data["rotation"][2].Value<float>(),
 			data["rotation"][3].Value<float>()
 		);
+		rotation = AttachedVehicle.transform.rotation * rotation;
 
 		transform.SetPositionAndRotation(position, rotation);
 		transform.localScale = new Vector3(
@@ -216,4 +226,17 @@ public class Part : MonoBehaviour
 	}
 
 	#endregion
+
+	[Flags]
+	public enum RotationRestriction
+	{
+		None = 0,
+		X = 1,
+		Y = 2,
+		XY = 3,
+		Z = 4,
+		XZ = 5,
+		YZ = 6,
+		XYZ = 7
+	}
 }

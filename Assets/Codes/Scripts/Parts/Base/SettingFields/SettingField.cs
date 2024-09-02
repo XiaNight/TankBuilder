@@ -112,3 +112,9 @@ public class FloatSettingField : SettingField<float>
 		return false;
 	}
 }
+
+[Serializable]
+public class BoolSettingField : SettingField<bool>
+{
+	public BoolSettingField(string name, bool value) : base(name, value) { }
+}

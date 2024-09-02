@@ -11,7 +11,7 @@ public class BuildingState : HangarManager.State
 	{
 		base.OnEnable(hangarManager, lastState);
 
-		if (lastState is TestDriveState)
+		if (lastState is TestDriveState or null)
 		{
 			Transform defaultTransform = hangar.hangarCameraDefaultPosition;
 			Camera.main.transform.SetPositionAndRotation(defaultTransform.position, defaultTransform.rotation);

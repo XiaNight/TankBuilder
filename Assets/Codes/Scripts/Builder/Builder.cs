@@ -71,8 +71,8 @@ public class Builder : MonoBehaviour
 		RayCastInteraction(ray);
 		if (isBuilding)
 		{
-			RayCastMounting(ray);
 			CheckRotate();
+			RayCastMounting(ray);
 			if (Input.GetKeyDown(KeyCode.Tab))
 			{
 				mountSelector++;
@@ -126,6 +126,9 @@ public class Builder : MonoBehaviour
 					BuildInstanceOn(mountee);
 				}
 
+				//TODO: local rotation of mounting.
+				// previewInstance.transform.rotation = mountee.transform.rotation * currentRotation;
+
 				// Something changed, update the mounting position
 				bool success = TryMounting(mountee);
 				if (success) color = Color.green;
@@ -133,17 +136,13 @@ public class Builder : MonoBehaviour
 			}
 			else //- Not hitting any mounting point.
 			{
-				//- Place on floor
+				//- Find Grid and place on floor
 				// if hit the build floor, move the selected instance to the hit point, and grid it to 0.25f
 				Vector3 pos = hit.point;
 				pos.x = Mathf.Round(pos.x * 4) * 0.25f;
 				pos.z = Mathf.Round(pos.z * 4) * 0.25f;
-				previewInstance.transform.position = pos;
 
-				if (Input.GetMouseButtonDown(0)) Buildinstance(previewInstance, vehicle.rootContraption);
-				if (Input.GetMouseButtonDown(1)) RemovePreview();
-
-				color = Color.blue;
+				PlacePreviewOnFloor(pos);
 			}
 
 			// Debug hit point
@@ -158,9 +157,51 @@ public class Builder : MonoBehaviour
 		}
 	}
 
+	//- Place on floor
+	private void PlacePreviewOnFloor(Vector3 pos)
+	{
+		Mount[] mounts = previewInstance.FindMatchingMounts(Vector3.down);
+
+		if (mounts.Length == 0)
+		{
+			mounts = previewInstance.Mounts;
+		}
+
+		if (mounts.Length > 0)
+		{
+			//- Find the nearest mount to the floor
+			float distToFloor = float.MaxValue;
+			Mount lowestMount = null;
+			foreach (Mount mount in mounts)
+			{
+				Vector3 mountPos = mount.transform.position;
+				float dist = mountPos.y - pos.y;
+				if (dist < distToFloor)
+				{
+					distToFloor = dist;
+					lowestMount = mount;
+				}
+			}
+
+			pos -= lowestMount.transform.position - previewInstance.transform.position;
+		}
+
+		previewInstance.transform.position = pos;
+
+		if (Input.GetMouseButtonDown(0)) Buildinstance(previewInstance, vehicle.rootContraption);
+		if (Input.GetMouseButtonDown(1)) RemovePreview();
+
+		color = Color.blue;
+	}
+
 	private void BuildInstanceOn(Mount mountOn)
 	{
-		Contraption contraption = mountOn.GetParent().GetContraption();
+		Contraption contraption = mountOn.Inheritance switch
+		{
+			Mount.ContraptionInheritance.Parent => mountOn.GetParent().AttachedContraption,
+			Mount.ContraptionInheritance.Self => mountOn.GetParent().GetContraption(),
+			_ => vehicle.rootContraption
+		};
 
 		if (contraption == null) contraption = vehicle.rootContraption;
 
@@ -182,22 +223,23 @@ public class Builder : MonoBehaviour
 	/// <returns> if the selected instance is able to place down. </returns>
 	private bool TryMounting(Mount mountee)
 	{
-		Mount mount = FindMatchingMount(mountee);
+		Mount mount = FindMatchingMount(mountee.transform.forward);
 		if (mount == null) return false;
 
 		CalculateMounting(mountee, mount);
 		return true;
 	}
 
-	private Mount FindMatchingMount(Mount mountee)
+	private Mount FindMatchingMount(Vector3 mountDir)
 	{
-		Mount[] matchingMounts = previewInstance.FindMatchingMounts(mountee);
+		Mount[] matchingMounts = previewInstance.FindMatchingMounts(mountDir);
 		if (matchingMounts.Length == 0)
 		{
 			color = Color.cyan;
 			return null;
 		}
 		mountSelector %= matchingMounts.Length;
+		//TODO: Collision Detection.
 		return matchingMounts[mountSelector];
 	}
 
