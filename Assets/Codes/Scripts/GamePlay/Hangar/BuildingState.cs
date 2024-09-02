@@ -32,8 +32,9 @@ public class BuildingState : HangarManager.State
 		Builder.Instance.SetBuildingState(true);
 
 		//- Part selection
-		hangar.partList.gameObject.SetActive(true);
 		hangar.partList.OnPartSelectedEvent += OnPartSelected;
+
+		hangar.buildModeUI.Enable();
 
 		UpdateState();
 	}
@@ -42,8 +43,9 @@ public class BuildingState : HangarManager.State
 	{
 		base.OnDisable();
 
-		hangar.partList.gameObject.SetActive(false);
 		hangar.partList.OnPartSelectedEvent -= OnPartSelected;
+
+		hangar.buildModeUI.Disable();
 
 		Builder.Instance.OnPartMousePressed -= OnMousePressed;
 	}
