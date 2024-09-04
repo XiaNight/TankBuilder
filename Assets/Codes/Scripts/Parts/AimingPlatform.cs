@@ -70,31 +70,28 @@ public class AimingPlatform : FreeHinge
 		return stoppingRotationDeg;
 	}
 
-	public override void SetPlayingState(bool isPlaying)
+	public override void OnPlay()
 	{
-		base.SetPlayingState(isPlaying);
-		if (isPlaying)
-		{
-			SetAimingTarget(AttachedVehicle.focusPoint);
+		base.OnPlay();
+		SetAimingTarget(AttachedVehicle.focusPoint);
 
-			//- Set Motor
-			JointMotor motor = hingeJoint.motor;
-			motor.force = forceField.Value;
-			hingeJoint.motor = motor;
+		//- Set Motor
+		JointMotor motor = hingeJoint.motor;
+		motor.force = forceField.Value;
+		hingeJoint.motor = motor;
 
-			//- Set Limits
-			hingeJoint.useLimits = limitRotation.Value;
-			hingeJoint.limits = new JointLimits { min = negetiveRotationLimit.Value, max = positiveRotationLimit.Value };
+		//- Set Limits
+		hingeJoint.useLimits = limitRotation.Value;
+		hingeJoint.limits = new JointLimits { min = negetiveRotationLimit.Value, max = positiveRotationLimit.Value };
 
-			//- Calculate Stopping Rotation
-			Vector3 horizontalInertiaTensor = rb.inertiaTensor;
-			horizontalInertiaTensor.y = 0;
+		//- Calculate Stopping Rotation
+		Vector3 horizontalInertiaTensor = rb.inertiaTensor;
+		horizontalInertiaTensor.y = 0;
 
-			float inertia = horizontalInertiaTensor.magnitude;
-			float angleToStop = CalculateStoppingRotation(motor.force, inertia, maxSpeedField.Value);
-			angleToStop = Mathf.Max(angleToStop, 1);
-			this.angleToStop = angleToStop * 1.1f;
-		}
+		float inertia = horizontalInertiaTensor.magnitude;
+		float angleToStop = CalculateStoppingRotation(motor.force, inertia, maxSpeedField.Value);
+		angleToStop = Mathf.Max(angleToStop, 1);
+		this.angleToStop = angleToStop * 1.1f;
 	}
 
 	public void SetAimingTarget(Transform target) => aimingTarget = target;

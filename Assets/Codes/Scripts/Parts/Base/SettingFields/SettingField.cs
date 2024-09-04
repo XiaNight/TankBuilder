@@ -4,6 +4,7 @@ using UnityEngine;
 public interface ISettingField
 {
 	string Key { get; }
+	string DisplayName { get; }
 	object Value { get; set; }
 	Type ValueType { get; }
 	void SetValue(object value);
@@ -14,7 +15,9 @@ public interface ISettingField
 public class SettingField<T> : ISettingField
 {
 	[SerializeField] protected string key;
+	[SerializeField] protected string displayName;
 	public string Key => key;
+	public string DisplayName => displayName;
 
 	[SerializeField] protected T value;
 	public T Value => value;

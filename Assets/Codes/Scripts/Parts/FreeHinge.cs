@@ -5,22 +5,21 @@ public class FreeHinge : Contraption
 	[SerializeField] protected Rigidbody rb;
 	[SerializeField] protected new HingeJoint hingeJoint;
 
-	public override void SetPlayingState(bool isPlaying)
+	public override void OnPlay()
 	{
-		base.SetPlayingState(isPlaying);
-
-		rb.isKinematic = !isPlaying;
+		base.OnPlay();
 
 		hingeJoint.connectedBody = transform.parent.GetComponentInParent<Rigidbody>();
 
-		if (isPlaying)
-		{
-			rb.mass = CalculateMass();
-		}
-		else
-		{
-			content.transform.localRotation = Quaternion.identity;
-		}
+		rb.isKinematic = false;
+		rb.mass = CalculateMass();
+	}
+
+	public override void OnEndPlay()
+	{
+		base.OnEndPlay();
+		rb.isKinematic = true;
+		content.transform.localRotation = Quaternion.identity;
 	}
 
 	public override void SetMetaData(PartData data)

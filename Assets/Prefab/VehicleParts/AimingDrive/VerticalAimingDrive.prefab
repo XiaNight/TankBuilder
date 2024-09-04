@@ -1611,31 +1611,36 @@ MonoBehaviour:
   rb: {fileID: 5443887913796411423}
   hingeJoint: {fileID: 6219997982873162488}
   forceField:
-    key: Turning Force
+    key: turning_force
+    displayName: Turning Force
     value: 6000
     minimumClamping: 1
     minValue: 3000
     maximumClamping: 1
     maxValue: 12000
   limitRotation:
-    key: Limit
+    key: is_rotation_limited
+    displayName: Limit
     value: 1
   negetiveRotationLimit:
-    key: Depression Angle
+    key: negetive_rotation_limit
+    displayName: Depression Angle
     value: -15
     minimumClamping: 1
     minValue: -180
-    maximumClamping: 1
+    maximumClamping: 0
     maxValue: 0
   positiveRotationLimit:
-    key: Elevation Angle
+    key: positive_rotation_limit
+    displayName: Elevation Angle
     value: 30
     minimumClamping: 1
     minValue: 0
     maximumClamping: 1
     maxValue: 180
   maxSpeedField:
-    key: Max Speed
+    key: max_speed
+    displayName: Max Speed
     value: 10
     minimumClamping: 1
     minValue: 0

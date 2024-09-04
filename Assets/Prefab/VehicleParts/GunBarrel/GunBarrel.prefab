@@ -223,6 +223,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   collider: {fileID: 6402152989451436329}
+  type: 0
+  inheritance: 1
+  renderer: {fileID: 0}
+  normalMaterial: {fileID: 0}
+  buildOnlyMaterial: {fileID: 0}
+  mountOnlyMaterial: {fileID: 0}
 --- !u!1 &682356063642278968
 GameObject:
   m_ObjectHideFlags: 0
@@ -301,6 +307,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   collider: {fileID: 2587077749750944919}
+  type: 0
+  inheritance: 1
+  renderer: {fileID: 0}
+  normalMaterial: {fileID: 0}
+  buildOnlyMaterial: {fileID: 0}
+  mountOnlyMaterial: {fileID: 0}
 --- !u!1 &767358405530599144
 GameObject:
   m_ObjectHideFlags: 0
@@ -896,6 +908,37 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+--- !u!1 &3314845603816456185
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2478503357277118844}
+  m_Layer: 0
+  m_Name: BarrelEnd
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2478503357277118844
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3314845603816456185}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 2.643}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6453901353579872829}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4769025929280335559
 GameObject:
   m_ObjectHideFlags: 0
@@ -974,6 +1017,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   collider: {fileID: 3375461577265403998}
+  type: 0
+  inheritance: 1
+  renderer: {fileID: 0}
+  normalMaterial: {fileID: 0}
+  buildOnlyMaterial: {fileID: 0}
+  mountOnlyMaterial: {fileID: 0}
 --- !u!1 &5497922419397483002
 GameObject:
   m_ObjectHideFlags: 0
@@ -1135,6 +1184,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   collider: {fileID: 3571411266554655362}
+  type: 0
+  inheritance: 1
+  renderer: {fileID: 0}
+  normalMaterial: {fileID: 0}
+  buildOnlyMaterial: {fileID: 0}
+  mountOnlyMaterial: {fileID: 0}
 --- !u!1 &6747425754028037596
 GameObject:
   m_ObjectHideFlags: 0
@@ -1358,6 +1413,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   collider: {fileID: 1401067605451440622}
+  type: 0
+  inheritance: 1
+  renderer: {fileID: 0}
+  normalMaterial: {fileID: 0}
+  buildOnlyMaterial: {fileID: 0}
+  mountOnlyMaterial: {fileID: 0}
 --- !u!1 &6895403294928561700
 GameObject:
   m_ObjectHideFlags: 0
@@ -1369,7 +1430,6 @@ GameObject:
   - component: {fileID: 4594444665084453209}
   - component: {fileID: 5678997035490140428}
   - component: {fileID: 4499877347877437157}
-  - component: {fileID: 8448143301052510392}
   m_Layer: 0
   m_Name: Capsule
   m_TagString: Untagged
@@ -1442,29 +1502,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &8448143301052510392
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6895403294928561700}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &6955322919941313330
 GameObject:
   m_ObjectHideFlags: 0
@@ -1626,6 +1663,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   collider: {fileID: 5487849030548981572}
+  type: 0
+  inheritance: 1
+  renderer: {fileID: 0}
+  normalMaterial: {fileID: 0}
+  buildOnlyMaterial: {fileID: 0}
+  mountOnlyMaterial: {fileID: 0}
 --- !u!1 &7623665378287046279
 GameObject:
   m_ObjectHideFlags: 0
@@ -1787,6 +1830,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   collider: {fileID: 698295568634235871}
+  type: 0
+  inheritance: 1
+  renderer: {fileID: 0}
+  normalMaterial: {fileID: 0}
+  buildOnlyMaterial: {fileID: 0}
+  mountOnlyMaterial: {fileID: 0}
 --- !u!1 &8041870329853182989
 GameObject:
   m_ObjectHideFlags: 0
@@ -1865,6 +1914,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   collider: {fileID: 6698511648033647915}
+  type: 0
+  inheritance: 1
+  renderer: {fileID: 0}
+  normalMaterial: {fileID: 0}
+  buildOnlyMaterial: {fileID: 0}
+  mountOnlyMaterial: {fileID: 0}
 --- !u!1 &9116493684050414718
 GameObject:
   m_ObjectHideFlags: 0
@@ -2004,6 +2059,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 3156458602202051807}
+    - targetCorrespondingSourceObject: {fileID: 6604550352141167295, guid: 3d75a4bd611faba43a732270780a672a,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2478503357277118844}
     - targetCorrespondingSourceObject: {fileID: 2883365265664905189, guid: 3d75a4bd611faba43a732270780a672a,
         type: 3}
       insertIndex: -1
@@ -2109,8 +2168,14 @@ MonoBehaviour:
   mountsContainer: {fileID: 4183080650117750386}
   interactionColliders: {fileID: 6074949498015536289}
   highlightVisual: {fileID: 5429571971629482245}
+  rotationRestriction: 0
   animator: {fileID: 714787519226470161}
   fireForce: 12000
+  barrelEnd: {fileID: 2478503357277118844}
+  projectile: {fileID: 1277172183611375436, guid: 71a82913e36862747b48af762bae872a,
+    type: 3}
+  firingEffect: {fileID: 1093832803886108370, guid: 030206bf67d42c64999c840c0b95740e,
+    type: 3}
 --- !u!4 &2900607024469838284 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3060697477872329038, guid: 3d75a4bd611faba43a732270780a672a,

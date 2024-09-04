@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json.Linq;
@@ -10,17 +11,29 @@ public class Contraption : Part
 
 	private Mount.State currentMountState = Mount.State.Disabled;
 
+	public event Action<Part> OnPartAdded;
+	public event Action<Part> OnPartRemoved;
+
 	private void Reset()
 	{
 		content = transform;
 	}
 
-	public override void SetPlayingState(bool isPlaying)
+	public override void OnPlay()
 	{
-		base.SetPlayingState(isPlaying);
+		base.OnPlay();
 		foreach (Part part in parts)
 		{
-			part.SetPlayingState(isPlaying);
+			part.OnPlay();
+		}
+	}
+
+	public override void OnEndPlay()
+	{
+		base.OnEndPlay();
+		foreach (Part part in parts)
+		{
+			part.OnEndPlay();
 		}
 	}
 
@@ -42,6 +55,8 @@ public class Contraption : Part
 		part.SetAttachedContraption(this);
 		part.SetMountState(currentMountState);
 		part.SetAttachedVehicle(AttachedVehicle);
+		part.OnAttached();
+		OnPartAdded?.Invoke(part);
 	}
 
 	public void RemovePart(Part part)
@@ -50,6 +65,28 @@ public class Contraption : Part
 			parts.Remove(part);
 		part.transform.SetParent(null);
 		part.SetAttachedContraption(null);
+		part.OnRemoved();
+		OnPartRemoved?.Invoke(part);
+	}
+
+	public override void OnOtherPartAttached(Part part)
+	{
+		base.OnOtherPartAttached(part);
+		foreach (Part p in parts)
+		{
+			if (p == part) continue;
+			p.OnOtherPartAttached(part);
+		}
+	}
+
+	public override void OnOtherPartRemoved(Part part)
+	{
+		base.OnOtherPartRemoved(part);
+		foreach (Part p in parts)
+		{
+			if (p == part) continue;
+			p.OnOtherPartRemoved(part);
+		}
 	}
 
 	public void ClearParts()

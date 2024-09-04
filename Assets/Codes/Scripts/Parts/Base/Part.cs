@@ -45,12 +45,53 @@ public class Part : MonoBehaviour
 		return mounts.Contains(mount);
 	}
 
-	public virtual void SetPlayingState(bool isPlaying)
+	/// <summary>
+	/// When the part is first placed down or spawned.
+	/// </summary>
+	public virtual void OnAttached()
 	{
-		this.isPlaying = isPlaying;
-		SetMountState(isPlaying ? Mount.State.Disabled : Mount.State.Enabled);
-		if (isPlaying) SetHighlight(false);
-		SetInteractionCollidersState(!isPlaying);
+
+	}
+
+	/// <summary>
+	/// When the part is removed from it's vehicle.
+	/// </summary>
+	public virtual void OnRemoved()
+	{
+
+	}
+
+	/// <summary>
+	/// On other part attached to this vehicle.
+	/// </summary>
+	/// <param name="part"> The part that has been attached.</param>
+	public virtual void OnOtherPartAttached(Part part)
+	{
+
+	}
+
+	/// <summary>
+	/// On other part removed from this vehicle.
+	/// </summary>
+	/// <param name="part"> The part that has been removed.</param>
+	public virtual void OnOtherPartRemoved(Part part)
+	{
+
+	}
+
+	public virtual void OnPlay()
+	{
+		isPlaying = true;
+		SetMountState(Mount.State.Disabled);
+		SetHighlight(false);
+		SetInteractionCollidersState(false);
+	}
+
+	public virtual void OnEndPlay()
+	{
+		isPlaying = false;
+		SetMountState(Mount.State.Enabled);
+		SetInteractionCollidersState(true);
 	}
 
 	public void SetInteractionCollidersState(bool state)

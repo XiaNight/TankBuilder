@@ -63,6 +63,11 @@ PrefabInstance:
       propertyPath: steer
       value: 30
       objectReference: {fileID: 0}
+    - target: {fileID: 6143302822171846262, guid: 8a1931ec8ca6f664699ab0911579927c,
+        type: 3}
+      propertyPath: steeringAngle
+      value: 40
+      objectReference: {fileID: 0}
     - target: {fileID: 8624827743830818326, guid: 8a1931ec8ca6f664699ab0911579927c,
         type: 3}
       propertyPath: m_Name

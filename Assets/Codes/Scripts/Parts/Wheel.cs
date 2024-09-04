@@ -1,21 +1,21 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class Wheel : Part
+public class Wheel : Part, IMovement
 {
-	public float power = 10;
-	public float steer = 10;
+	public float steeringAngle = 40;
 	public float brake = 10;
 	public float smoothSteerFactor = 5;
 	public WheelCollider wheelCollider;
 	public Transform wheelTransform;
 
 	private Part part;
-	private int directionMultiplier = 1;
+	private int visualRotationFix = 1;
 
 	private float targetSteeringAngle;
 	private float currentSteeringAngle;
+
+	public float Circumference => wheelCollider.radius * 2 * Mathf.PI;
+	public float UnitRPM => wheelCollider.rpm / Circumference;
 
 	private new void Awake()
 	{
@@ -23,37 +23,36 @@ public class Wheel : Part
 		part = GetComponent<Part>();
 	}
 
-	public void SetPower(float power)
+	public override void OnPlay()
 	{
-		this.power = power;
-	}
-
-	public void SetSteer(float steer)
-	{
-		this.steer = steer;
-	}
-
-	public void SetBrake(float brake)
-	{
-		this.brake = brake;
-	}
-
-	public override void SetPlayingState(bool isPlaying)
-	{
-		base.SetPlayingState(isPlaying);
+		base.OnPlay();
 		wheelCollider.rotationSpeed = 0;
+		visualRotationFix = transform.forward.z > 0 ? 1 : -1;
+	}
+
+	public override void OnEndPlay()
+	{
+		base.OnEndPlay();
+		wheelCollider.motorTorque = 0;
+		wheelCollider.wheelDampingRate = 0;
+		wheelCollider.steerAngle = 0;
+		wheelCollider.brakeTorque = 0;
+		wheelCollider.rotationSpeed = 0;
+
+		wheelCollider.GetWorldPose(out Vector3 position, out Quaternion rotation);
+		wheelTransform.SetPositionAndRotation(position, rotation);
 	}
 
 	private void Update()
 	{
 		if (!part.isPlaying) return;
 
-		float forward = Input.GetKey(KeyCode.W) ? 1 : Input.GetKey(KeyCode.S) ? -1 : 0;
-		wheelCollider.motorTorque = forward * power * directionMultiplier;
-		wheelCollider.wheelDampingRate = Input.GetKey(KeyCode.Space) ? brake / wheelCollider.rpm : 0;
-		targetSteeringAngle = Input.GetKey(KeyCode.A) ? -steer : Input.GetKey(KeyCode.D) ? steer : 0;
-
+		//- Update wheel visual
 		wheelCollider.GetWorldPose(out Vector3 position, out Quaternion rotation);
+		if (visualRotationFix == -1)
+		{
+			rotation *= Quaternion.Euler(0, 0, 180);
+		}
 		wheelTransform.SetPositionAndRotation(position, rotation);
 	}
 
@@ -65,13 +64,24 @@ public class Wheel : Part
 		wheelCollider.steerAngle = currentSteeringAngle;
 	}
 
-	public override void OnMouseOver()
+
+	/// <summary>
+	/// Set the power level of the motors, from -1 to 1
+	/// </summary>
+	/// <param name="torque"> The power level of the motors, from -1 to 1 </param>
+	public void SetTorque(float torque)
 	{
-		if (Input.GetKeyDown(KeyCode.F))
-		{
-			directionMultiplier *= -1;
-			print("Direction Multiplier: " + directionMultiplier);
-		}
+		wheelCollider.motorTorque = torque;
+	}
+
+	public void SetBrake(float brake)
+	{
+		// wheelCollider.wheelDampingRate = brake * wheelCollider.rpm / brake;
+	}
+
+	public void SetSteer(float steer)
+	{
+		targetSteeringAngle = Mathf.Lerp(-steeringAngle, steeringAngle, (steer + 1) / 2);
 	}
 
 	private void OnDrawGizmos()

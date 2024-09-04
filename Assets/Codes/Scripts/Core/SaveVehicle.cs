@@ -4,6 +4,11 @@ public class SaveVehicle : MonoBehaviour
 {
 	public Vehicle vehicle;
 
+	private void Start()
+	{
+		Load();
+	}
+
 	private void Update()
 	{
 		if (Input.GetKeyDown(KeyCode.L))
@@ -28,6 +33,12 @@ public class SaveVehicle : MonoBehaviour
 
 	private void Load()
 	{
+		if (!PlayerPrefs.HasKey("Vehicle"))
+		{
+			Debug.Log("No vehicle data found");
+			return;
+		}
+
 		// Load vehicle data
 		string vehicleData = PlayerPrefs.GetString("Vehicle");
 		vehicle.SetSerializedData(vehicleData);
