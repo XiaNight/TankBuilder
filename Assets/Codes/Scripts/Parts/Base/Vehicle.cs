@@ -13,6 +13,7 @@ public class Vehicle : MonoBehaviour, IUserUpdate
 	[SerializeField] private Powertrain powertrain;
 
 	public bool IsPlaying { get; private set; } = false;
+	public bool IsUser { get; private set; } = false;
 
 	private void Awake()
 	{
@@ -35,6 +36,11 @@ public class Vehicle : MonoBehaviour, IUserUpdate
 	{
 		if (!IsPlaying) return;
 		powertrain.MobilityUpdate();
+	}
+
+	void IUserUpdate.SetFocusState(bool state)
+	{
+		IsUser = state;
 	}
 
 	private void OnDestroy()

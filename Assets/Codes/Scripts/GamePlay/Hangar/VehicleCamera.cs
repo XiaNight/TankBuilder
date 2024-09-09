@@ -7,6 +7,7 @@ public class VehicleCamera : MonoBehaviour
 	public Vector2 screenAimingPosition;
 	public LayerMask aimingRayCastLayers;
 	public Transform aimingTarget;
+	public Vector3 lookPos;
 
 	private void Update()
 	{
@@ -23,16 +24,24 @@ public class VehicleCamera : MonoBehaviour
 		Ray ray = Camera.main.ViewportPointToRay(screenAimingPosition);
 		if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, aimingRayCastLayers))
 		{
-			aimingTarget.position = hit.point;
+			lookPos = hit.point;
 		}
 		else
 		{
-			aimingTarget.position = ray.GetPoint(100);
+			lookPos = ray.GetPoint(100);
 		}
+		aimingTarget.position = lookPos;
 	}
 
 	public void SetAnchorPosition(Bounds bounds)
 	{
 		anchor.position = bounds.center;
+	}
+
+	private void OnDrawGizmos()
+	{
+		Gizmos.color = Color.white;
+		Gizmos.DrawLine(transform.position, lookPos);
+		Gizmos.DrawSphere(lookPos, 0.1f);
 	}
 }

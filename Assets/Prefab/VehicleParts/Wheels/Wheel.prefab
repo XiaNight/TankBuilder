@@ -82,6 +82,8 @@ GameObject:
   - component: {fileID: 2779190168225880090}
   - component: {fileID: 1951456984581979268}
   - component: {fileID: 7176788662684080994}
+  - component: {fileID: 1835582028236299745}
+  - component: {fileID: 2719184664817797344}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -154,6 +156,33 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &1835582028236299745
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2490964235043949014}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc06b8fc96234b1479484f9c7167da39, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  component: {fileID: 2719184664817797344}
+  invert: 0
+--- !u!114 &2719184664817797344
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2490964235043949014}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4218d78ef2d54d0898b7514e121a781f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &3923399440873441746
 GameObject:
   m_ObjectHideFlags: 0
@@ -198,6 +227,8 @@ GameObject:
   - component: {fileID: 9171154725966386987}
   - component: {fileID: 7424551325661501724}
   - component: {fileID: 3664330441195912736}
+  - component: {fileID: 7704748161397401992}
+  - component: {fileID: 6770531857857523980}
   m_Layer: 0
   m_Name: Cylinder
   m_TagString: Untagged
@@ -270,6 +301,33 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &7704748161397401992
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4852665460381011588}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc06b8fc96234b1479484f9c7167da39, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  component: {fileID: 6770531857857523980}
+  invert: 0
+--- !u!114 &6770531857857523980
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4852665460381011588}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4218d78ef2d54d0898b7514e121a781f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &5034972399357384202
 GameObject:
   m_ObjectHideFlags: 0
@@ -550,6 +608,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8180634091832457570, guid: 3d75a4bd611faba43a732270780a672a,
+        type: 3}
+      propertyPath: toggleables.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8180634091832457570, guid: 3d75a4bd611faba43a732270780a672a,
+        type: 3}
+      propertyPath: toggleables.Array.data[0]
+      value: 
+      objectReference: {fileID: 7704748161397401992}
+    - target: {fileID: 8180634091832457570, guid: 3d75a4bd611faba43a732270780a672a,
+        type: 3}
+      propertyPath: toggleables.Array.data[1]
+      value: 
+      objectReference: {fileID: 1835582028236299745}
     m_RemovedComponents:
     - {fileID: 2243036539906510198, guid: 3d75a4bd611faba43a732270780a672a, type: 3}
     m_RemovedGameObjects: []
@@ -660,6 +733,7 @@ MonoBehaviour:
   mountsContainer: {fileID: 6396258405638362779}
   interactionColliders: {fileID: 3929343329293900872}
   highlightVisual: {fileID: 2995153655132244460}
+  highlightToggle: {fileID: 0}
   rotationRestriction: 0
   steeringAngle: 0
   brake: 12000

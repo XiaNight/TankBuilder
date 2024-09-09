@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6604550352141167295}
   - component: {fileID: 2243036539906510198}
+  - component: {fileID: 8180634091832457570}
   m_Layer: 0
   m_Name: PartBase
   m_TagString: Untagged
@@ -52,7 +53,21 @@ MonoBehaviour:
   mountsContainer: {fileID: 4050292060959323888}
   interactionColliders: {fileID: 6230238579057228835}
   highlightVisual: {fileID: 5287639839949203847}
+  highlightToggle: {fileID: 8180634091832457570}
   rotationRestriction: 0
+--- !u!114 &8180634091832457570
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1675373322239925885}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 033bcd7c8f21a459d89ad161c76b8d5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  toggleables: []
 --- !u!1 &4050292060959323888
 GameObject:
   m_ObjectHideFlags: 0

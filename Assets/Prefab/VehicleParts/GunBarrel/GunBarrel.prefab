@@ -1513,6 +1513,7 @@ GameObject:
   - component: {fileID: 1380427519445282038}
   - component: {fileID: 922005361040013781}
   - component: {fileID: 8660073761779679963}
+  - component: {fileID: 2489543261715374834}
   m_Layer: 0
   m_Name: Highlight
   m_TagString: Untagged
@@ -1585,6 +1586,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &2489543261715374834
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6955322919941313330}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4218d78ef2d54d0898b7514e121a781f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &6996854456892114860
 GameObject:
   m_ObjectHideFlags: 0
@@ -2071,10 +2085,6 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 4404841057863099957}
-    - targetCorrespondingSourceObject: {fileID: 7962011544229266013, guid: 3d75a4bd611faba43a732270780a672a,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1380427519445282038}
     - targetCorrespondingSourceObject: {fileID: 3060697477872329038, guid: 3d75a4bd611faba43a732270780a672a,
         type: 3}
       insertIndex: -1
@@ -2115,6 +2125,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 8052092913515770567}
+    - targetCorrespondingSourceObject: {fileID: 7962011544229266013, guid: 3d75a4bd611faba43a732270780a672a,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1380427519445282038}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 1675373322239925885, guid: 3d75a4bd611faba43a732270780a672a,
         type: 3}

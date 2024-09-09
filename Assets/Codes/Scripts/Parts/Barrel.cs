@@ -16,6 +16,8 @@ public class Barrel : Part
 
 	public override void PlayUpdate()
 	{
+		if (!AttachedVehicle.IsUser) return;
+
 		if (Input.GetMouseButtonDown(0))
 		{
 			Fire();

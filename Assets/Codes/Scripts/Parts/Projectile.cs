@@ -62,6 +62,8 @@ public class Projectile : MonoBehaviour
 
 		SpawnRayCastProjectile(other);
 
+		Debug.Log(other.transform.name);
+
 		//- calculate reflection vector
 		Vector3 hitVelocity = -other.relativeVelocity;
 		Vector3 normal = other.contacts[0].normal;

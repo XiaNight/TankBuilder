@@ -36,11 +36,13 @@ public class UserUpdate : MonoBehaviour
 	public void AddInterface(IUserUpdate i)
 	{
 		interfaces.Add(i);
+		i.SetFocusState(true);
 	}
 
 	public void RemoveInterface(IUserUpdate i)
 	{
 		interfaces.Remove(i);
+		i.SetFocusState(false);
 	}
 
 	public void Clear()
@@ -54,4 +56,5 @@ public interface IUserUpdate
 {
 	public void UserLoop() { }
 	void UserFixedUpdate() { }
+	void SetFocusState(bool state) { }
 }

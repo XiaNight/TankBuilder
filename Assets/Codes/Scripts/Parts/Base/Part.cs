@@ -16,6 +16,7 @@ public class Part : MonoBehaviour
 
 	[Tooltip("Visual object for highlighting the part")]
 	[SerializeField] private GameObject highlightVisual;
+	[SerializeField] private Toggleable highlightToggle;
 
 	[SerializeField]
 	private RotationRestriction rotationRestriction = RotationRestriction.None;
@@ -32,6 +33,7 @@ public class Part : MonoBehaviour
 	{
 		if (mountsContainer != null) mounts = new List<Mount>(mountsContainer.GetComponentsInChildren<Mount>());
 		if (physicCollidersContainer != null) physicColliders = new List<Collider>(physicCollidersContainer.GetComponentsInChildren<Collider>());
+		if (highlightToggle == null) highlightToggle = GetComponent<Toggleable>();
 	}
 
 	public Collider[] GetColliders()
@@ -204,6 +206,7 @@ public class Part : MonoBehaviour
 	{
 		if (highlightVisual == null) return;
 		highlightVisual.SetActive(isHighlighted);
+		highlightToggle.SetState(isHighlighted);
 	}
 
 	public virtual List<ISettingField> OpenSettings()
