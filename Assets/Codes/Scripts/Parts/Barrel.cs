@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class Barrel : Part
@@ -7,6 +8,8 @@ public class Barrel : Part
 	[SerializeField] private Transform barrelEnd;
 	[SerializeField] private Projectile projectile;
 	[SerializeField] private GameObject firingEffect;
+	[SerializeField] private float reloadTime = 1;
+	[SerializeField] private bool isReloaded = true;
 	private Rigidbody rb;
 
 	private new void Awake()
@@ -18,7 +21,7 @@ public class Barrel : Part
 	{
 		if (!AttachedVehicle.IsUser) return;
 
-		if (Input.GetMouseButtonDown(0))
+		if (Input.GetMouseButton(0))
 		{
 			Fire();
 		}
@@ -39,6 +42,8 @@ public class Barrel : Part
 
 	public void Fire()
 	{
+		if (!isReloaded) return;
+		isReloaded = false;
 		animator.SetTrigger("Fire");
 		rb.AddForceAtPosition(-transform.forward * fireForce, transform.position, ForceMode.Impulse);
 		Projectile newProjectile = Instantiate(projectile, barrelEnd.position, barrelEnd.rotation);
@@ -49,5 +54,13 @@ public class Barrel : Part
 			var effect = Instantiate(firingEffect, barrelEnd.position, barrelEnd.rotation);
 			Destroy(effect, 2);
 		}
+
+		StartCoroutine(Reload());
+	}
+
+	public IEnumerator Reload()
+	{
+		yield return new WaitForSeconds(reloadTime);
+		isReloaded = true;
 	}
 }

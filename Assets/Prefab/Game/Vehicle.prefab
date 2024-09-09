@@ -95,7 +95,7 @@ Rigidbody:
   m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
 --- !u!114 &8595813947988074873
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -242,6 +242,7 @@ MonoBehaviour:
   mountsContainer: {fileID: 0}
   interactionColliders: {fileID: 0}
   highlightVisual: {fileID: 0}
+  highlightToggle: {fileID: 0}
   rotationRestriction: 0
   content: {fileID: 9053263317480156427}
   parts: []

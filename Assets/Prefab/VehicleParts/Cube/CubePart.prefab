@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 4611620295741764591}
   - component: {fileID: 359124366708419720}
   - component: {fileID: 2315916065039856305}
-  - component: {fileID: 161982035643548511}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -98,20 +97,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _color: {r: 1, g: 1, b: 1, a: 1}
---- !u!114 &161982035643548511
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4585100224451511628}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bc06b8fc96234b1479484f9c7167da39, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  component: {fileID: 2315916065039856305}
-  invert: 0
 --- !u!1 &6135038345425767138
 GameObject:
   m_ObjectHideFlags: 0
@@ -632,9 +617,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2243036539906510198, guid: 3d75a4bd611faba43a732270780a672a,
         type: 3}
+      propertyPath: highlightOutlines.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2243036539906510198, guid: 3d75a4bd611faba43a732270780a672a,
+        type: 3}
       propertyPath: physicColliders.Array.data[0]
       value: 
       objectReference: {fileID: 8627171861879607958}
+    - target: {fileID: 2243036539906510198, guid: 3d75a4bd611faba43a732270780a672a,
+        type: 3}
+      propertyPath: highlightOutlines.Array.data[0]
+      value: 
+      objectReference: {fileID: 2315916065039856305}
     - target: {fileID: 6604550352141167295, guid: 3d75a4bd611faba43a732270780a672a,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -690,11 +685,6 @@ PrefabInstance:
       propertyPath: toggleables.Array.size
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 8180634091832457570, guid: 3d75a4bd611faba43a732270780a672a,
-        type: 3}
-      propertyPath: toggleables.Array.data[0]
-      value: 
-      objectReference: {fileID: 161982035643548511}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:

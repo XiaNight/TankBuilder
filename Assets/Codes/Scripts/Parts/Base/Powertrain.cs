@@ -41,6 +41,21 @@ public class Powertrain : MonoBehaviour
 		engineRPM = maxUnitRPM;
 	}
 
+	public void SetBrake(float amount)
+	{
+		brake = amount;
+	}
+
+	public void SetSteer(float amount)
+	{
+		steering = amount;
+	}
+
+	public void SetMovement(float movement)
+	{
+		movementForward = movement;
+	}
+
 	public void Clear()
 	{
 		movementForward = 0;

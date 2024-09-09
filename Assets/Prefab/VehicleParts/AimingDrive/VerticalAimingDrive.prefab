@@ -73,7 +73,6 @@ GameObject:
   - component: {fileID: 2554940991874635283}
   - component: {fileID: 4961139500098778852}
   - component: {fileID: 1455202675590861444}
-  - component: {fileID: 848179054863362636}
   - component: {fileID: 5083703641445040053}
   m_Layer: 0
   m_Name: Cube (1)
@@ -147,20 +146,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &848179054863362636
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1778863195962141202}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bc06b8fc96234b1479484f9c7167da39, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  component: {fileID: 5083703641445040053}
-  invert: 0
 --- !u!114 &5083703641445040053
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -185,7 +170,6 @@ GameObject:
   - component: {fileID: 1736026103728775675}
   - component: {fileID: 865910533402222039}
   - component: {fileID: 8273752741189923088}
-  - component: {fileID: 62030088024343173}
   - component: {fileID: 2433079574577983333}
   m_Layer: 0
   m_Name: Cube
@@ -259,20 +243,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &62030088024343173
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2204061312566860351}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bc06b8fc96234b1479484f9c7167da39, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  component: {fileID: 2433079574577983333}
-  invert: 0
 --- !u!114 &2433079574577983333
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -380,7 +350,6 @@ GameObject:
   - component: {fileID: 6543237047737373492}
   - component: {fileID: 8453392274821758508}
   - component: {fileID: 5500672985886436386}
-  - component: {fileID: 6907495165642808066}
   - component: {fileID: 8120236949308284803}
   m_Layer: 0
   m_Name: Cube (4)
@@ -454,20 +423,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &6907495165642808066
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2956447475567102379}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bc06b8fc96234b1479484f9c7167da39, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  component: {fileID: 8120236949308284803}
-  invert: 0
 --- !u!114 &8120236949308284803
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -492,7 +447,6 @@ GameObject:
   - component: {fileID: 4742273669470541422}
   - component: {fileID: 5312125135921397741}
   - component: {fileID: 3419116999114252013}
-  - component: {fileID: 6513921495063364828}
   - component: {fileID: 5271824665966828381}
   m_Layer: 0
   m_Name: Cube (2)
@@ -566,20 +520,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &6513921495063364828
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5047104855237861335}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bc06b8fc96234b1479484f9c7167da39, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  component: {fileID: 5271824665966828381}
-  invert: 0
 --- !u!114 &5271824665966828381
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -604,7 +544,6 @@ GameObject:
   - component: {fileID: 6958132975896810795}
   - component: {fileID: 2162977206221056051}
   - component: {fileID: 4677249601487340288}
-  - component: {fileID: 7165511004634251176}
   - component: {fileID: 5081929931346429042}
   m_Layer: 0
   m_Name: Cube
@@ -678,20 +617,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &7165511004634251176
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5762136869821258061}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bc06b8fc96234b1479484f9c7167da39, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  component: {fileID: 5081929931346429042}
-  invert: 0
 --- !u!114 &5081929931346429042
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -716,7 +641,6 @@ GameObject:
   - component: {fileID: 7288366512231576419}
   - component: {fileID: 7260079994190789681}
   - component: {fileID: 5194663525172098558}
-  - component: {fileID: 4194772515328088367}
   - component: {fileID: 5690092910899737216}
   m_Layer: 0
   m_Name: Cube (5)
@@ -790,20 +714,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &4194772515328088367
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8868920381343311716}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bc06b8fc96234b1479484f9c7167da39, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  component: {fileID: 5690092910899737216}
-  invert: 0
 --- !u!114 &5690092910899737216
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1447,36 +1357,6 @@ PrefabInstance:
       propertyPath: toggleables.Array.size
       value: 6
       objectReference: {fileID: 0}
-    - target: {fileID: 133800218762611041, guid: 528c3bd35a3cddd49a1f110975ac2cc1,
-        type: 3}
-      propertyPath: toggleables.Array.data[0]
-      value: 
-      objectReference: {fileID: 7165511004634251176}
-    - target: {fileID: 133800218762611041, guid: 528c3bd35a3cddd49a1f110975ac2cc1,
-        type: 3}
-      propertyPath: toggleables.Array.data[1]
-      value: 
-      objectReference: {fileID: 62030088024343173}
-    - target: {fileID: 133800218762611041, guid: 528c3bd35a3cddd49a1f110975ac2cc1,
-        type: 3}
-      propertyPath: toggleables.Array.data[2]
-      value: 
-      objectReference: {fileID: 848179054863362636}
-    - target: {fileID: 133800218762611041, guid: 528c3bd35a3cddd49a1f110975ac2cc1,
-        type: 3}
-      propertyPath: toggleables.Array.data[3]
-      value: 
-      objectReference: {fileID: 6513921495063364828}
-    - target: {fileID: 133800218762611041, guid: 528c3bd35a3cddd49a1f110975ac2cc1,
-        type: 3}
-      propertyPath: toggleables.Array.data[4]
-      value: 
-      objectReference: {fileID: 6907495165642808066}
-    - target: {fileID: 133800218762611041, guid: 528c3bd35a3cddd49a1f110975ac2cc1,
-        type: 3}
-      propertyPath: toggleables.Array.data[5]
-      value: 
-      objectReference: {fileID: 4194772515328088367}
     - target: {fileID: 3167220517243886268, guid: 528c3bd35a3cddd49a1f110975ac2cc1,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1677,7 +1557,13 @@ MonoBehaviour:
   mountsContainer: {fileID: 3923623595722297525}
   interactionColliders: {fileID: 6354655004140051046}
   highlightVisual: {fileID: 5127204826617139138}
-  highlightToggle: {fileID: 9205769584434568999}
+  highlightOutlines:
+  - {fileID: 5081929931346429042}
+  - {fileID: 2433079574577983333}
+  - {fileID: 5083703641445040053}
+  - {fileID: 5271824665966828381}
+  - {fileID: 8120236949308284803}
+  - {fileID: 5690092910899737216}
   rotationRestriction: 0
   content: {fileID: 882838824378994533}
   parts: []
@@ -1686,7 +1572,7 @@ MonoBehaviour:
   forceField:
     key: turning_force
     displayName: Turning Force
-    value: 6000
+    value: 8000
     minimumClamping: 1
     minValue: 3000
     maximumClamping: 1
@@ -1714,7 +1600,7 @@ MonoBehaviour:
   maxSpeedField:
     key: max_speed
     displayName: Max Speed
-    value: 10
+    value: 17
     minimumClamping: 1
     minValue: 0
     maximumClamping: 1
@@ -1841,15 +1727,3 @@ HingeJoint:
   m_EnablePreprocessing: 1
   m_MassScale: 1
   m_ConnectedMassScale: 1
---- !u!114 &9205769584434568999 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 133800218762611041, guid: 528c3bd35a3cddd49a1f110975ac2cc1,
-    type: 3}
-  m_PrefabInstance: {fileID: 9086623845697607238}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1803158234329528376}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 033bcd7c8f21a459d89ad161c76b8d5e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

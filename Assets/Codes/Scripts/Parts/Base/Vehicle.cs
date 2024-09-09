@@ -11,6 +11,7 @@ public class Vehicle : MonoBehaviour, IUserUpdate
 	public UnityEvent<Bounds> OnCalculateBounds;
 
 	[SerializeField] private Powertrain powertrain;
+	public Powertrain Powertrain => powertrain;
 
 	public bool IsPlaying { get; private set; } = false;
 	public bool IsUser { get; private set; } = false;

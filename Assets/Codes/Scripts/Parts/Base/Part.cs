@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Newtonsoft.Json.Linq;
 using System;
+using OutlineFx;
 
 public class Part : MonoBehaviour
 {
@@ -16,7 +17,7 @@ public class Part : MonoBehaviour
 
 	[Tooltip("Visual object for highlighting the part")]
 	[SerializeField] private GameObject highlightVisual;
-	[SerializeField] private Toggleable highlightToggle;
+	[SerializeField] private Outline[] highlightOutlines;
 
 	[SerializeField]
 	private RotationRestriction rotationRestriction = RotationRestriction.None;
@@ -29,11 +30,15 @@ public class Part : MonoBehaviour
 
 	public Mount[] Mounts => mounts.ToArray();
 
+	private void Reset()
+	{
+		highlightOutlines = GetComponentsInChildren<Outline>();
+	}
+
 	protected void Awake()
 	{
 		if (mountsContainer != null) mounts = new List<Mount>(mountsContainer.GetComponentsInChildren<Mount>());
 		if (physicCollidersContainer != null) physicColliders = new List<Collider>(physicCollidersContainer.GetComponentsInChildren<Collider>());
-		if (highlightToggle == null) highlightToggle = GetComponent<Toggleable>();
 	}
 
 	public Collider[] GetColliders()
@@ -202,11 +207,16 @@ public class Part : MonoBehaviour
 		return 0;
 	}
 
-	public virtual void SetHighlight(bool isHighlighted)
+	public virtual void SetHighlight(bool isHighlighted, Color color = default)
 	{
 		if (highlightVisual == null) return;
 		highlightVisual.SetActive(isHighlighted);
-		highlightToggle.SetState(isHighlighted);
+
+		foreach (Outline outline in highlightOutlines)
+		{
+			outline.enabled = isHighlighted;
+			outline.Color = color;
+		}
 	}
 
 	public virtual List<ISettingField> OpenSettings()
@@ -223,13 +233,21 @@ public class Part : MonoBehaviour
 	public virtual void OnMouseEnter()
 	{
 		OnMouseEnterEvent?.Invoke();
-		if (!AttachedVehicle.IsPlaying) SetHighlight(true);
+		if (!AttachedVehicle.IsPlaying)
+		{
+			AttachedContraption.SetHighlight(true, Color.green);
+			SetHighlight(true, Color.yellow);
+		}
 	}
 
 	public virtual void OnMouseExit()
 	{
 		OnMouseExitEvent?.Invoke();
-		if (!AttachedVehicle.IsPlaying) SetHighlight(false);
+		if (!AttachedVehicle.IsPlaying)
+		{
+			AttachedContraption.SetHighlight(false);
+			SetHighlight(false);
+		}
 	}
 
 	public virtual void OnMouseOver()

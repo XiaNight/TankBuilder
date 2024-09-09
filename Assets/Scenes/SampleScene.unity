@@ -979,6 +979,12 @@ Transform:
   - {fileID: 722704747}
   m_Father: {fileID: 2061500672}
   m_LocalEulerAnglesHint: {x: -60, y: -90, z: 0}
+--- !u!4 &113377079 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3894898375610631975, guid: dc91f54ea210e954a9dd34ea4fb01763,
+    type: 3}
+  m_PrefabInstance: {fileID: 1930359376}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &120822021
 GameObject:
   m_ObjectHideFlags: 0
@@ -4580,6 +4586,7 @@ MonoBehaviour:
     -0.25,         1.125,         -1.1500001       ],       "rotation": [        
     0.0,         0.0,         0.0,         1.0       ],       "scale": [        
     1.0,         1.0,         1.0       ]     }   ] }'
+  focusPoint: {fileID: 113377079}
 --- !u!4 &653212450
 Transform:
   m_ObjectHideFlags: 0
@@ -13492,7 +13499,7 @@ GameObject:
   - component: {fileID: 1777475247}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -15576,6 +15583,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Vehicle
+      objectReference: {fileID: 0}
+    - target: {fileID: 3942201309356252993, guid: dc91f54ea210e954a9dd34ea4fb01763,
+        type: 3}
+      propertyPath: m_TagString
+      value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 5079849959161634396, guid: dc91f54ea210e954a9dd34ea4fb01763,
         type: 3}

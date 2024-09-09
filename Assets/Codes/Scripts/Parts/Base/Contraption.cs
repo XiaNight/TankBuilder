@@ -148,6 +148,20 @@ public class Contraption : Part
 		return mass;
 	}
 
+	public override void SetHighlight(bool isHighlighted, Color color = default)
+	{
+		base.SetHighlight(isHighlighted, color);
+	}
+
+	public void SetHighlightAll(bool isHighlighted, Color color = default)
+	{
+		SetHighlight(isHighlighted, color);
+		foreach (Part part in parts)
+		{
+			part.SetHighlight(isHighlighted, color);
+		}
+	}
+
 	#region Serialization
 
 	public override JObject Serialize()

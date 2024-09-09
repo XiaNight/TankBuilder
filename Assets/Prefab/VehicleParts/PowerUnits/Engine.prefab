@@ -596,6 +596,7 @@ GameObject:
   - component: {fileID: 4450669138764356104}
   - component: {fileID: 958084581932066768}
   - component: {fileID: 4654308029312461310}
+  - component: {fileID: 8384422102411804816}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -668,6 +669,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &8384422102411804816
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 543188981827082488}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4218d78ef2d54d0898b7514e121a781f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &555732827568720315
 GameObject:
   m_ObjectHideFlags: 0
@@ -7810,7 +7824,6 @@ GameObject:
   - component: {fileID: 5334536377871219390}
   - component: {fileID: 5732251868512776383}
   - component: {fileID: 3126585081970700041}
-  - component: {fileID: 6727659554996457031}
   m_Layer: 0
   m_Name: Cube (1)
   m_TagString: Untagged
@@ -7883,19 +7896,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &6727659554996457031
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4098389875143711529}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4218d78ef2d54d0898b7514e121a781f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &4103098798997888129
 GameObject:
   m_ObjectHideFlags: 0
@@ -16746,7 +16746,8 @@ MonoBehaviour:
   mountsContainer: {fileID: 5846024459466175243}
   interactionColliders: {fileID: 4567362043007121880}
   highlightVisual: {fileID: 2338985611375504508}
-  highlightToggle: {fileID: 0}
+  highlightOutlines:
+  - {fileID: 8384422102411804816}
   rotationRestriction: 0
   horsePower: 560
   torqueRPMCurve:

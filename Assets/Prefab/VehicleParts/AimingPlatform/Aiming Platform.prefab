@@ -95,7 +95,6 @@ GameObject:
   - component: {fileID: 393901599510115751}
   - component: {fileID: 8995600403884898428}
   - component: {fileID: 6469509377012813546}
-  - component: {fileID: 9199742821625850412}
   m_Layer: 0
   m_Name: Cylinder
   m_TagString: Untagged
@@ -181,20 +180,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _color: {r: 1, g: 1, b: 1, a: 1}
---- !u!114 &9199742821625850412
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2209844701432413550}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bc06b8fc96234b1479484f9c7167da39, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  component: {fileID: 6469509377012813546}
-  invert: 0
 --- !u!1 &2707037238737255544
 GameObject:
   m_ObjectHideFlags: 0
@@ -332,7 +317,6 @@ GameObject:
   - component: {fileID: 5269148851666803800}
   - component: {fileID: 3565868515837986948}
   - component: {fileID: 45710557883462754}
-  - component: {fileID: 178451017215332904}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -418,20 +402,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _color: {r: 1, g: 1, b: 1, a: 1}
---- !u!114 &178451017215332904
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9170418704242100269}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bc06b8fc96234b1479484f9c7167da39, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  component: {fileID: 45710557883462754}
-  invert: 0
 --- !u!1001 &970484079462554028
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1481,16 +1451,6 @@ PrefabInstance:
       propertyPath: toggleables.Array.size
       value: 2
       objectReference: {fileID: 0}
-    - target: {fileID: 133800218762611041, guid: 528c3bd35a3cddd49a1f110975ac2cc1,
-        type: 3}
-      propertyPath: toggleables.Array.data[0]
-      value: 
-      objectReference: {fileID: 9199742821625850412}
-    - target: {fileID: 133800218762611041, guid: 528c3bd35a3cddd49a1f110975ac2cc1,
-        type: 3}
-      propertyPath: toggleables.Array.data[1]
-      value: 
-      objectReference: {fileID: 178451017215332904}
     - target: {fileID: 3167220517243886268, guid: 528c3bd35a3cddd49a1f110975ac2cc1,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1696,7 +1656,9 @@ MonoBehaviour:
   mountsContainer: {fileID: 1953120320933712021}
   interactionColliders: {fileID: 8455832950597655110}
   highlightVisual: {fileID: 7660095018688401378}
-  highlightToggle: {fileID: 0}
+  highlightOutlines:
+  - {fileID: 6469509377012813546}
+  - {fileID: 45710557883462754}
   rotationRestriction: 0
   content: {fileID: 2389471253511475013}
   parts: []
