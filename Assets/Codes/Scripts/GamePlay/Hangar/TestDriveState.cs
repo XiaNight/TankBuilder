@@ -20,6 +20,15 @@ public class TestDriveState : HangarManager.State
 		hangar.freeCam.enabled = false;
 		hangar.vehicleCamera.enabled = true;
 		hangar.partList.enabled = false;
+
+		UserUpdate.Instance.AddInterface(hangar.playerVehicle);
+	}
+
+	public override void OnDisable()
+	{
+		base.OnDisable();
+
+		UserUpdate.Instance.RemoveInterface(hangar.playerVehicle);
 	}
 
 	public override void Update()

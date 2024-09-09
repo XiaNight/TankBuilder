@@ -25,16 +25,15 @@ public class AimingPlatform : FreeHinge
 		base.Awake();
 	}
 
-	private void Update()
+	public override void PlayUpdate()
 	{
-		if (!isPlaying) return;
-
+		base.PlayUpdate();
 		UpdateAimingDirection();
 	}
 
-	private void FixedUpdate()
+	public override void PlayFixedUpdate()
 	{
-		if (!isPlaying) return;
+		base.PlayFixedUpdate();
 
 		//- Angle Calculation
 		float angle = Vector3.SignedAngle(Vector3.forward, localTargetPosition, Vector3.up);
@@ -161,7 +160,7 @@ public class AimingPlatform : FreeHinge
 	private const int GIZMO_CIRCLE_RESOLUTION = 15;
 	private void OnDrawGizmos()
 	{
-		if (!isPlaying) return;
+		if (!AttachedVehicle?.IsPlaying ?? true) return;
 
 		//- Draw wired circle
 		Gizmos.color = Color.white;

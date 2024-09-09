@@ -34,7 +34,7 @@ public class BuildingState : HangarManager.State
 		//- Part selection
 		hangar.partList.OnPartSelectedEvent += OnPartSelected;
 
-		hangar.buildModeUI.Enable();
+		hangar.buildModeToggleGroup.Enable();
 
 		UpdateState();
 	}
@@ -45,7 +45,7 @@ public class BuildingState : HangarManager.State
 
 		hangar.partList.OnPartSelectedEvent -= OnPartSelected;
 
-		hangar.buildModeUI.Disable();
+		hangar.buildModeToggleGroup.Disable();
 
 		Builder.Instance.OnPartMousePressed -= OnMousePressed;
 	}
@@ -62,17 +62,32 @@ public class BuildingState : HangarManager.State
 		if (Input.GetKeyDown(KeyCode.Tab))
 		{
 			hangar.SetGameState(new EditState());
-			// switch (state)
-			// {
-			// 	case State.Building:
-			// 		Builder.Instance.ClearSelectedPartData();
-			// 		state = State.UIFocused;
-			// 		break;
-			// 	case State.UIFocused:
-			// 		Builder.Instance.SetSelectedPartData(hangar.partList.GetSelectedPartData());
-			// 		state = State.Building;
-			// 		break;
-			// }
+		}
+
+		if (Input.GetKeyDown(KeyCode.O))
+		{
+			string json = hangar.playerVehicle.GetSerializedData();
+			Debug.Log(json);
+			// copy to clipboard
+			TextEditor te = new();
+			te.text = json;
+			te.SelectAll();
+			te.Copy();
+		}
+
+		if (Input.GetKeyDown(KeyCode.Escape))
+		{
+			switch (state)
+			{
+				case State.Building:
+					Builder.Instance.RemovePreview();
+					state = State.UIFocused;
+					break;
+				case State.UIFocused:
+					Builder.Instance.SetSelectedPartData(hangar.partList.GetSelectedPartData());
+					state = State.Building;
+					break;
+			}
 
 			UpdateState();
 		}
@@ -80,10 +95,7 @@ public class BuildingState : HangarManager.State
 
 	private void OnMousePressed(Part part, int mouseBtn)
 	{
-		switch (mouseBtn)
-		{
 
-		}
 	}
 
 	private void OnPartSelected(PartData partData)

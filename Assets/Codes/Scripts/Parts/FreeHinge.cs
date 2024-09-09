@@ -19,6 +19,7 @@ public class FreeHinge : Contraption
 	{
 		base.OnEndPlay();
 		rb.isKinematic = true;
+		//FIXME: rotation cannot reset to identity, some content rotation is altered.
 		content.transform.localRotation = Quaternion.identity;
 	}
 

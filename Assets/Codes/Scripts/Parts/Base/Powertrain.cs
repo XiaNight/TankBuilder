@@ -28,9 +28,13 @@ public class Powertrain : MonoBehaviour
 		float maxUnitRPM = 0;
 		foreach (IMovement movement in mobility)
 		{
-			movement.SetTorque(movementForward * torqueRPMCurve.Evaluate(movement.UnitRPM * 300) * power / mobilityCount * 50);
-			movement.SetSteer(steering);
 			movement.SetBrake(brake);
+
+			float torque = movementForward * torqueRPMCurve.Evaluate(Mathf.Abs(movement.UnitRPM) * 300) * power / mobilityCount * 50;
+			if (movement.UnitRPM * movementForward < 0) movement.SetBrake(1);
+
+			movement.SetTorque(torque);
+			movement.SetSteer(steering);
 
 			maxUnitRPM = Mathf.Max(movement.UnitRPM, maxUnitRPM);
 		}

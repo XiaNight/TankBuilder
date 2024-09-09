@@ -19,6 +19,15 @@ public class Contraption : Part
 		content = transform;
 	}
 
+	public override void OnSpawned()
+	{
+		base.OnSpawned();
+		foreach (Part part in parts)
+		{
+			part.OnSpawned();
+		}
+	}
+
 	public override void OnPlay()
 	{
 		base.OnPlay();
@@ -34,6 +43,24 @@ public class Contraption : Part
 		foreach (Part part in parts)
 		{
 			part.OnEndPlay();
+		}
+	}
+
+	public override void PlayUpdate()
+	{
+		base.PlayUpdate();
+		foreach (Part part in parts)
+		{
+			part.PlayUpdate();
+		}
+	}
+
+	public override void PlayFixedUpdate()
+	{
+		base.PlayFixedUpdate();
+		foreach (Part part in parts)
+		{
+			part.PlayFixedUpdate();
 		}
 	}
 

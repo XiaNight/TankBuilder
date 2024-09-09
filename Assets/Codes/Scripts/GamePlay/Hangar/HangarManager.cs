@@ -9,11 +9,11 @@ public class HangarManager : MonoBehaviour
 	public VehicleCamera vehicleCamera;
 	public Transform hangarCameraDefaultPosition;
 
+	public Toggleable buildModeToggleGroup;
+	public Toggleable editModeToggleGroup;
+	public Toggleable testDriveModeToggleGroup;
 
 	[Header("UI")]
-	public Toggleable buildModeUI;
-	public Toggleable editModeUI;
-	public Toggleable testDriveModeUI;
 	public PartList partList;
 
 	[SerializeField] private TMP_Text modeText;

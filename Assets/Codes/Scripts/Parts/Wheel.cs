@@ -8,7 +8,6 @@ public class Wheel : Part, IMovement
 	public WheelCollider wheelCollider;
 	public Transform wheelTransform;
 
-	private Part part;
 	private int visualRotationFix = 1;
 
 	private float targetSteeringAngle;
@@ -20,14 +19,19 @@ public class Wheel : Part, IMovement
 	private new void Awake()
 	{
 		base.Awake();
-		part = GetComponent<Part>();
+	}
+
+	public override void OnSpawned()
+	{
+		base.OnSpawned();
+		visualRotationFix = transform.forward.z > 0 ? 1 : -1;
+		UpdateWheelVisual();
 	}
 
 	public override void OnPlay()
 	{
 		base.OnPlay();
 		wheelCollider.rotationSpeed = 0;
-		visualRotationFix = transform.forward.z > 0 ? 1 : -1;
 	}
 
 	public override void OnEndPlay()
@@ -39,15 +43,24 @@ public class Wheel : Part, IMovement
 		wheelCollider.brakeTorque = 0;
 		wheelCollider.rotationSpeed = 0;
 
-		wheelCollider.GetWorldPose(out Vector3 position, out Quaternion rotation);
-		wheelTransform.SetPositionAndRotation(position, rotation);
+		UpdateWheelVisual();
 	}
 
-	private void Update()
+	public override void OnPlacementChanged()
 	{
-		if (!part.isPlaying) return;
+		base.OnPlacementChanged();
+		visualRotationFix = transform.forward.z > 0 ? 1 : -1;
+		UpdateWheelVisual();
+	}
 
-		//- Update wheel visual
+	public override void PlayUpdate()
+	{
+		UpdateWheelVisual();
+	}
+
+	//- Update wheel visual
+	private void UpdateWheelVisual()
+	{
 		wheelCollider.GetWorldPose(out Vector3 position, out Quaternion rotation);
 		if (visualRotationFix == -1)
 		{
@@ -56,10 +69,8 @@ public class Wheel : Part, IMovement
 		wheelTransform.SetPositionAndRotation(position, rotation);
 	}
 
-	private void FixedUpdate()
+	public override void PlayFixedUpdate()
 	{
-		if (!part.isPlaying) return;
-
 		currentSteeringAngle = Mathf.Lerp(currentSteeringAngle, targetSteeringAngle, Time.fixedDeltaTime * smoothSteerFactor);
 		wheelCollider.steerAngle = currentSteeringAngle;
 	}
@@ -76,7 +87,7 @@ public class Wheel : Part, IMovement
 
 	public void SetBrake(float brake)
 	{
-		// wheelCollider.wheelDampingRate = brake * wheelCollider.rpm / brake;
+		wheelCollider.brakeTorque = this.brake * brake;
 	}
 
 	public void SetSteer(float steer)

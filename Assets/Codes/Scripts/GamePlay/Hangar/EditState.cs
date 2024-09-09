@@ -18,7 +18,7 @@ public class EditState : HangarManager.State
 		hangar.vehicleCamera.enabled = false;
 		hangar.partList.enabled = true;
 
-		hangar.editModeUI.Enable();
+		hangar.editModeToggleGroup.Enable();
 
 		Builder.Instance.SetBuildingState(false);
 		Builder.Instance.OnPartMousePressed += OnMousePressed;
@@ -46,7 +46,7 @@ public class EditState : HangarManager.State
 	{
 		base.OnDisable();
 
-		hangar.editModeUI.Disable();
+		hangar.editModeToggleGroup.Disable();
 
 		Builder.Instance.OnPartMousePressed -= OnMousePressed;
 	}

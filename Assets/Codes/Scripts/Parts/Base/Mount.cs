@@ -23,8 +23,10 @@ public class Mount : MonoBehaviour
 				MountingRule.Normal => normalMaterial,
 				MountingRule.BuildOnly => buildOnlyMaterial,
 				MountingRule.MountOnly => mountOnlyMaterial,
-				_ => renderer.material
+				MountingRule.Invalid => normalMaterial,
+				_ => normalMaterial
 			};
+			renderer.enabled = type != MountingRule.Invalid;
 		}
 	}
 
@@ -75,6 +77,14 @@ public class Mount : MonoBehaviour
 		/// <summary>
 		/// Only for mounting. No building on top.
 		/// </summary>
-		MountOnly
+		MountOnly,
+
+		/// <summary>
+		/// Invalid connection, only for float building.
+		/// This mount cannot be used for connecting parts together,
+		/// only used when uer trying to build a part that cannot not connect on to the part
+		/// but still shows a visual of the part's rotation.
+		/// </summary>
+		Invalid,
 	}
 }

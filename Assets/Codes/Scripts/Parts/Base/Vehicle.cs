@@ -3,7 +3,7 @@ using Newtonsoft.Json.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class Vehicle : MonoBehaviour
+public class Vehicle : MonoBehaviour, IUserUpdate
 {
 	public Rigidbody rb;
 	public Contraption rootContraption;
@@ -12,7 +12,7 @@ public class Vehicle : MonoBehaviour
 
 	[SerializeField] private Powertrain powertrain;
 
-	private bool isPlaying = false;
+	public bool IsPlaying { get; private set; } = false;
 
 	private void Awake()
 	{
@@ -23,7 +23,17 @@ public class Vehicle : MonoBehaviour
 
 	private void Update()
 	{
-		if (!isPlaying) return;
+		if (IsPlaying) rootContraption.PlayUpdate();
+	}
+
+	private void FixedUpdate()
+	{
+		if (IsPlaying) rootContraption.PlayFixedUpdate();
+	}
+
+	void IUserUpdate.UserLoop()
+	{
+		if (!IsPlaying) return;
 		powertrain.MobilityUpdate();
 	}
 
@@ -36,11 +46,6 @@ public class Vehicle : MonoBehaviour
 		}
 	}
 
-	private void OnCollisionStay(Collision collision)
-	{
-		Debug.Log("Stay");
-	}
-
 	public void RestoreOriginal()
 	{
 		rootContraption.RestoreOriginal();
@@ -48,7 +53,8 @@ public class Vehicle : MonoBehaviour
 
 	public void SetPlayingMode(bool isPlaying)
 	{
-		this.isPlaying = isPlaying;
+		if (this.IsPlaying == isPlaying) return;
+		this.IsPlaying = isPlaying;
 		if (isPlaying)
 		{
 			rootContraption.OnPlay();
@@ -66,6 +72,11 @@ public class Vehicle : MonoBehaviour
 				}
 				OnCalculateBounds.Invoke(bounds);
 			}
+
+			// lower center of mass by 70%
+			rb.centerOfMass -= 0.5f * rb.centerOfMass.y * Vector3.up;
+
+			Debug.Log(rb.centerOfMass);
 		}
 		else
 		{
@@ -105,5 +116,7 @@ public class Vehicle : MonoBehaviour
 		rootContraption.ClearParts();
 
 		rootContraption.Deserialize(jObject);
+
+		rootContraption.OnSpawned();
 	}
 }

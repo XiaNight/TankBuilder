@@ -254,6 +254,7 @@ public class Builder : MonoBehaviour
 		mountingPos -= mountingLocalPos;
 
 		previewInstance.transform.position = mountingPos;
+		previewInstance.OnPlacementChanged();
 		color = Color.green;
 	}
 
@@ -338,11 +339,15 @@ public class Builder : MonoBehaviour
 	{
 		RemovePreview();
 
+		if (selectedPartData == null) Debug.Log("Selected Part Data is null");
+		if (selectedPartData.prefab == null) Debug.Log("Selected Part Data Prefab is null");
+
 		previewInstance = Instantiate(selectedPartData.prefab);
 		previewInstance.SetMetaData(selectedPartData);
 		previewInstance.SetMountState(Mount.State.ShowOnly);
 		previewInstance.SetColliderState(false);
 		previewInstance.SetInteractionCollidersState(false);
+		previewInstance.OnSpawned();
 		previewInstance.transform.rotation = currentRotation;
 	}
 

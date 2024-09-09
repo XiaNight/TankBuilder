@@ -73,10 +73,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a62f5dbd78bc0c345b6da12641ecd50b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  penetrationCollider: {fileID: 0}
   hitEffect: {fileID: 7663041732546567641, guid: 13d4ebbe1cf0607478405eefd424414f,
     type: 3}
+  rayCastLayer:
+    serializedVersion: 2
+    m_Bits: 2049
+  armorLayer:
+    serializedVersion: 2
+    m_Bits: 2048
   muzzleVelocity: 850
   penetration: 180
+  projectilMass: 20
+  createShrapnel: 0
+  shrapnelSetting:
+    shrapnelCount: 0
+    mainShrapnelDamage: 0
 --- !u!1 &8771793506333964794
 GameObject:
   m_ObjectHideFlags: 0

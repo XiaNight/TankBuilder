@@ -47,7 +47,7 @@ WheelCollider:
     damper: 10000
     targetPosition: 0
   m_SuspensionDistance: 0.3
-  m_ForceAppPointDistance: 0.5
+  m_ForceAppPointDistance: 0.2
   m_Mass: 200
   m_WheelDampingRate: 0.25
   m_ForwardFriction:
@@ -566,10 +566,6 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 8877060354216211717}
-    - targetCorrespondingSourceObject: {fileID: 7962011544229266013, guid: 3d75a4bd611faba43a732270780a672a,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 6346287938367394217}
     - targetCorrespondingSourceObject: {fileID: 3060697477872329038, guid: 3d75a4bd611faba43a732270780a672a,
         type: 3}
       insertIndex: -1
@@ -578,6 +574,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 3861146323059156904}
+    - targetCorrespondingSourceObject: {fileID: 7962011544229266013, guid: 3d75a4bd611faba43a732270780a672a,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6346287938367394217}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 1675373322239925885, guid: 3d75a4bd611faba43a732270780a672a,
         type: 3}
@@ -662,7 +662,7 @@ MonoBehaviour:
   highlightVisual: {fileID: 2995153655132244460}
   rotationRestriction: 0
   steeringAngle: 0
-  brake: 100
+  brake: 12000
   smoothSteerFactor: 5
   wheelCollider: {fileID: 8152467202499909607}
   wheelTransform: {fileID: 6261084110697520809}

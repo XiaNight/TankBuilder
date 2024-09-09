@@ -23,7 +23,6 @@ public class Part : MonoBehaviour
 	public Contraption AttachedContraption { get; private set; }
 	public Vehicle AttachedVehicle { get; private set; }
 
-	public bool isPlaying { get; private set; } = false;
 	protected List<Collider> physicColliders = new();
 	protected List<Mount> mounts = new();
 
@@ -43,6 +42,22 @@ public class Part : MonoBehaviour
 	public bool ContainsMount(Mount mount)
 	{
 		return mounts.Contains(mount);
+	}
+
+	/// <summary>
+	/// On part is spawned (instantiated and called after deserialize).
+	/// </summary>
+	public virtual void OnSpawned()
+	{
+
+	}
+
+	/// <summary>
+	/// When the placement of the part changed.
+	/// </summary>
+	public virtual void OnPlacementChanged()
+	{
+
 	}
 
 	/// <summary>
@@ -81,7 +96,6 @@ public class Part : MonoBehaviour
 
 	public virtual void OnPlay()
 	{
-		isPlaying = true;
 		SetMountState(Mount.State.Disabled);
 		SetHighlight(false);
 		SetInteractionCollidersState(false);
@@ -89,9 +103,18 @@ public class Part : MonoBehaviour
 
 	public virtual void OnEndPlay()
 	{
-		isPlaying = false;
 		SetMountState(Mount.State.Enabled);
 		SetInteractionCollidersState(true);
+	}
+
+	public virtual void PlayUpdate()
+	{
+
+	}
+
+	public virtual void PlayFixedUpdate()
+	{
+
 	}
 
 	public void SetInteractionCollidersState(bool state)
@@ -197,13 +220,13 @@ public class Part : MonoBehaviour
 	public virtual void OnMouseEnter()
 	{
 		OnMouseEnterEvent?.Invoke();
-		if (!isPlaying) SetHighlight(true);
+		if (!AttachedVehicle.IsPlaying) SetHighlight(true);
 	}
 
 	public virtual void OnMouseExit()
 	{
 		OnMouseExitEvent?.Invoke();
-		if (!isPlaying) SetHighlight(false);
+		if (!AttachedVehicle.IsPlaying) SetHighlight(false);
 	}
 
 	public virtual void OnMouseOver()

@@ -14,9 +14,8 @@ public class Barrel : Part
 		base.Awake();
 	}
 
-	private void Update()
+	public override void PlayUpdate()
 	{
-		if (!isPlaying) return;
 		if (Input.GetMouseButtonDown(0))
 		{
 			Fire();
@@ -48,7 +47,5 @@ public class Barrel : Part
 			var effect = Instantiate(firingEffect, barrelEnd.position, barrelEnd.rotation);
 			Destroy(effect, 2);
 		}
-
-		Debug.Log("Fire!");
 	}
 }

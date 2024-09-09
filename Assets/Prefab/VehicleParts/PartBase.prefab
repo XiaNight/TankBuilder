@@ -31,9 +31,9 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2883365265664905189}
-  - {fileID: 7962011544229266013}
   - {fileID: 3060697477872329038}
   - {fileID: 4625679104106746569}
+  - {fileID: 7962011544229266013}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2243036539906510198
@@ -52,6 +52,7 @@ MonoBehaviour:
   mountsContainer: {fileID: 4050292060959323888}
   interactionColliders: {fileID: 6230238579057228835}
   highlightVisual: {fileID: 5287639839949203847}
+  rotationRestriction: 0
 --- !u!1 &4050292060959323888
 GameObject:
   m_ObjectHideFlags: 0
