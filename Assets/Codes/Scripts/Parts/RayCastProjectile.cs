@@ -30,15 +30,11 @@ class RayCastProjectile
 		this.canCreateShrapnel = canCreateShrapnel;
 	}
 
-	public void Initiate(float range)
+	public void RayCast(float range)
 	{
 		if (Physics.Raycast(ray, out RaycastHit hit, range, rayCastLayer))
 		{
 			OnHit(hit.collider, hit.point);
-		}
-		else
-		{
-
 		}
 	}
 
@@ -57,6 +53,9 @@ class RayCastProjectile
 			{
 				density = armor.ArmorDensity;
 			}
+
+			IHealth healthModule = collider.GetComponentInParent<IHealth>();
+			healthModule?.TakeDamage(remainingPenetration);
 		}
 
 		//- Get raw penetration thickness
@@ -76,6 +75,8 @@ class RayCastProjectile
 		remainingPenetration -= thickness * 1000;
 
 		if (hasPenetrated && canCreateShrapnel) CreateShrapnels(new Ray(hitPoint, ray.direction));
+
+
 
 		return new HitInfo
 		{
@@ -101,7 +102,7 @@ class RayCastProjectile
 	public void CreateShrapnel(Ray ray)
 	{
 		RayCastProjectile rayCastProjectile = new(ray, rayCastLayer, armorLayer, penetration, false);
-		rayCastProjectile.Initiate(100);
+		rayCastProjectile.RayCast(100);
 		rayCastProjectiles.Add(rayCastProjectile);
 	}
 

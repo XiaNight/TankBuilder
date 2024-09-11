@@ -697,6 +697,8 @@ MonoBehaviour:
   - {fileID: 2719184664817797344}
   - {fileID: 6770531857857523980}
   rotationRestriction: 0
+  health: 100
+  maxHealth: 100
   steeringAngle: 0
   brake: 12000
   smoothSteerFactor: 5

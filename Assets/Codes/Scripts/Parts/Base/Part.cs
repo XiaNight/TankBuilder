@@ -4,7 +4,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using OutlineFx;
 
-public class Part : MonoBehaviour
+public class Part : MonoBehaviour, IHealth
 {
 	[Tooltip("Colliders for the main gameplay physics")]
 	[SerializeField] private GameObject physicCollidersContainer;
@@ -112,6 +112,7 @@ public class Part : MonoBehaviour
 	{
 		SetMountState(Mount.State.Enabled);
 		SetInteractionCollidersState(true);
+		Restore();
 	}
 
 	public virtual void PlayUpdate()
@@ -189,7 +190,6 @@ public class Part : MonoBehaviour
 	#region Metadata
 
 	protected PartData MetaData { get; private set; }
-
 	public event Action<PartData> OnMetaDataChangedEvent;
 
 	public virtual void SetMetaData(PartData data)
@@ -308,6 +308,55 @@ public class Part : MonoBehaviour
 			return value.Value<T>();
 		}
 		return default;
+	}
+
+	#endregion
+
+	#region Health
+
+	public float health = 100;
+	public float Health => health;
+
+	public float maxHealth = 100;
+	public float MaxHealth => maxHealth;
+
+	private bool isDead = false;
+	public bool IsDead => isDead;
+
+	public virtual void TakeDamage(float damage)
+	{
+		if (isDead) return;
+		health -= damage;
+		if (health <= 0)
+		{
+			OnHealthDepleted();
+			isDead = true;
+		}
+		Debug.Log($"Took Damage {damage}, Remaining Health: {health}");
+	}
+
+	public virtual void Heal(float heal)
+	{
+		health += heal;
+		if (health > maxHealth)
+		{
+			health = maxHealth;
+		}
+		if (health > 0)
+		{
+			isDead = false;
+		}
+	}
+
+	public virtual void OnHealthDepleted()
+	{
+
+	}
+
+	public virtual void Restore()
+	{
+		health = maxHealth;
+		isDead = false;
 	}
 
 	#endregion

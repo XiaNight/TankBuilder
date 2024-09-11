@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class Barrel : Part
+public class Barrel : Part, IWeapon
 {
 	[SerializeField] private Animator animator;
 	[SerializeField] private float fireForce = 1000;
@@ -11,6 +11,7 @@ public class Barrel : Part
 	[SerializeField] private float reloadTime = 1;
 	[SerializeField] private bool isReloaded = true;
 	private Rigidbody rb;
+	bool IWeapon.IsLoaded => isReloaded;
 
 	private new void Awake()
 	{
@@ -56,6 +57,12 @@ public class Barrel : Part
 		}
 
 		StartCoroutine(Reload());
+	}
+
+	bool IWeapon.IsAimed(Vector3 pos)
+	{
+		Vector3 localDir = transform.InverseTransformPoint(pos).normalized;
+		return localDir.z > 0.999f;
 	}
 
 	public IEnumerator Reload()

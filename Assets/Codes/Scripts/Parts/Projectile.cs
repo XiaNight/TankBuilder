@@ -75,6 +75,8 @@ public class Projectile : MonoBehaviour
 		}
 
 		Instantiate(hitEffect, other.contacts[0].point, Quaternion.LookRotation(outDirection));
+
+		Destroy(gameObject, 5);
 	}
 
 	public void SpawnRayCastProjectile(Collision other)

@@ -1660,6 +1660,8 @@ MonoBehaviour:
   - {fileID: 6469509377012813546}
   - {fileID: 45710557883462754}
   rotationRestriction: 0
+  health: 100
+  maxHealth: 100
   content: {fileID: 2389471253511475013}
   parts: []
   rb: {fileID: 8682577802649351617}

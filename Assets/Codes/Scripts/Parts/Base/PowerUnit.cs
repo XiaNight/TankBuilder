@@ -10,6 +10,6 @@ public class PowerUnit : Part
 
 	public float GetTorque(float rpm)
 	{
-		return horsePower;
+		return horsePower * health / MaxHealth;
 	}
 }

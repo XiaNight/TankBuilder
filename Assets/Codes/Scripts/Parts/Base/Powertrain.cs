@@ -25,6 +25,7 @@ public class Powertrain : MonoBehaviour
 
 	public void FixedUpdate()
 	{
+		RecalculatePower();
 		float maxUnitRPM = 0;
 		foreach (IMovement movement in mobility)
 		{
@@ -51,7 +52,7 @@ public class Powertrain : MonoBehaviour
 		steering = amount;
 	}
 
-	public void SetMovement(float movement)
+	public void SetThrottle(float movement)
 	{
 		movementForward = movement;
 	}
@@ -80,13 +81,18 @@ public class Powertrain : MonoBehaviour
 	public void AddPowerUnit(PowerUnit powerUnit)
 	{
 		powerUnits.Add(powerUnit);
-		power = GetPower();
+		RecalculatePower();
 	}
 
 	public void RemovePowerUnit(PowerUnit powerUnit)
 	{
 		if (powerUnits.Contains(powerUnit))
 			powerUnits.Remove(powerUnit);
+		RecalculatePower();
+	}
+
+	private void RecalculatePower()
+	{
 		power = GetPower();
 	}
 

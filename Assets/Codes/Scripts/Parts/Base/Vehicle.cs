@@ -13,8 +13,10 @@ public class Vehicle : MonoBehaviour, IUserUpdate
 	[SerializeField] private Powertrain powertrain;
 	public Powertrain Powertrain => powertrain;
 
+	public List<IWeapon> Weapons { get; private set; } = new();
 	public bool IsPlaying { get; private set; } = false;
 	public bool IsUser { get; private set; } = false;
+	public Vector3 CenterOfMass { get; private set; }
 
 	private void Awake()
 	{
@@ -81,6 +83,8 @@ public class Vehicle : MonoBehaviour, IUserUpdate
 			}
 
 			// lower center of mass by 70%
+			rb.ResetCenterOfMass();
+			CenterOfMass = rb.centerOfMass;
 			rb.centerOfMass -= 0.5f * rb.centerOfMass.y * Vector3.up;
 
 			Debug.Log(rb.centerOfMass);
@@ -100,6 +104,10 @@ public class Vehicle : MonoBehaviour, IUserUpdate
 			powertrain.AddPowerUnit(powerUnit);
 		if (part is IMovement movement)
 			powertrain.Add(movement);
+		if (part is IWeapon weapon)
+		{
+			Weapons.Add(weapon);
+		}
 	}
 
 	private void OnPartRemoved(Part part)
@@ -107,6 +115,7 @@ public class Vehicle : MonoBehaviour, IUserUpdate
 		rootContraption.OnOtherPartRemoved(part);
 		if (part is PowerUnit powerUnit) powertrain.RemovePowerUnit(powerUnit);
 		if (part is IMovement movement) powertrain.Remove(movement);
+		if (part is IWeapon weapon) Weapons.Remove(weapon);
 	}
 
 	public string GetSerializedData()

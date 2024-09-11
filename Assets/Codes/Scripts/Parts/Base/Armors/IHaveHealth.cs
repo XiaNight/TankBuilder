@@ -1,4 +1,4 @@
-public interface IHaveHealth
+public interface IHealth
 {
 	/// <summary>
 	/// The current health of the part.
@@ -9,6 +9,8 @@ public interface IHaveHealth
 	/// The maximum health of the part.
 	/// </summary>
 	float MaxHealth { get; }
+
+	bool IsDead { get; }
 
 	/// <summary>
 	/// When the part takes damage.

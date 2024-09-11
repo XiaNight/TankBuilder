@@ -10352,7 +10352,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61f4a63f819686641bf86f5ca8aa5bd9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  armorDensity: 1
+  armorDensity: 0.5
 --- !u!1 &5819051705027760219
 GameObject:
   m_ObjectHideFlags: 0
@@ -16749,6 +16749,8 @@ MonoBehaviour:
   highlightOutlines:
   - {fileID: 8384422102411804816}
   rotationRestriction: 0
+  health: 100
+  maxHealth: 100
   horsePower: 560
   torqueRPMCurve:
     serializedVersion: 2

@@ -84,6 +84,12 @@ public class Contraption : Part
 		part.SetAttachedVehicle(AttachedVehicle);
 		part.OnAttached();
 		OnPartAdded?.Invoke(part);
+
+		if (part is Contraption contraption)
+		{
+			contraption.OnPartAdded += OnPartAdded;
+			contraption.OnPartRemoved += OnPartRemoved;
+		}
 	}
 
 	public void RemovePart(Part part)

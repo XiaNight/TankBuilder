@@ -1503,8 +1503,10 @@ MonoBehaviour:
   mountsContainer: {fileID: 6080890487545479183}
   interactionColliders: {fileID: 4188469148491188956}
   highlightVisual: {fileID: 2681707687187832696}
-  highlightToggle: {fileID: 0}
+  highlightOutlines: []
   rotationRestriction: 0
+  health: 100
+  maxHealth: 100
   meshFilter: {fileID: 5836705619850257026}
   thicknessField:
     key: thickness
