@@ -83,7 +83,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 2048
   muzzleVelocity: 850
-  penetration: 180
+  penetration: 100
   projectilMass: 20
   createShrapnel: 0
   shrapnelSetting:

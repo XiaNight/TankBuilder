@@ -32,21 +32,21 @@ public class FlatArmor : ArmorPlate
 			new(thickness, offsetField.Value),
 			new(thickness, offsetField.Value),
 		});
-		meshFilter.mesh = mesh;
+		ApplyMesh();
 	}
 
 	protected override void ConstructMesh(Mesh mesh, in ArmorValue[] av)
 	{
 		Vector3[] rawVerts = new Vector3[8]
 		{
-			new(-Constants.HALF_GRID, av[0].OffsetMeters, -Constants.HALF_GRID), 				//- ( --- ) SW
-			new(-Constants.HALF_GRID, av[1].OffsetMeters, Constants.HALF_GRID), 				//- ( --+ ) NW
-			new(Constants.HALF_GRID, av[2].OffsetMeters, Constants.HALF_GRID), 					//- ( +-+ ) NE
-			new(Constants.HALF_GRID, av[3].OffsetMeters, -Constants.HALF_GRID), 				//- ( +-- ) SE
-			new(-Constants.HALF_GRID, av[0].ThicknessMeters + av[0].OffsetMeters, -Constants.HALF_GRID), //- ( -+- ) SW
-			new(-Constants.HALF_GRID, av[1].ThicknessMeters + av[1].OffsetMeters, Constants.HALF_GRID),	//- ( -++ ) NW
-			new(Constants.HALF_GRID, av[2].ThicknessMeters + av[2].OffsetMeters, Constants.HALF_GRID), 	//- ( +++ ) NE
-			new(Constants.HALF_GRID, av[3].ThicknessMeters + av[3].OffsetMeters, -Constants.HALF_GRID),   //- ( ++- ) SE
+			new(-Constants.HALF_GRID, av[0].OffsetMeters - av[0].ThicknessMeters / 2, -Constants.HALF_GRID), 				//- ( --- ) SW
+			new(-Constants.HALF_GRID, av[1].OffsetMeters - av[1].ThicknessMeters / 2, Constants.HALF_GRID), 				//- ( --+ ) NW
+			new(Constants.HALF_GRID, av[2].OffsetMeters - av[2].ThicknessMeters / 2, Constants.HALF_GRID), 					//- ( +-+ ) NE
+			new(Constants.HALF_GRID, av[3].OffsetMeters - av[3].ThicknessMeters / 2, -Constants.HALF_GRID), 				//- ( +-- ) SE
+			new(-Constants.HALF_GRID, av[0].OffsetMeters + av[0].ThicknessMeters / 2, -Constants.HALF_GRID), //- ( -+- ) SW
+			new(-Constants.HALF_GRID, av[1].OffsetMeters + av[1].ThicknessMeters / 2, Constants.HALF_GRID),	//- ( -++ ) NW
+			new(Constants.HALF_GRID, av[2].OffsetMeters + av[2].ThicknessMeters / 2, Constants.HALF_GRID), 	//- ( +++ ) NE
+			new(Constants.HALF_GRID, av[3].OffsetMeters + av[3].ThicknessMeters / 2, -Constants.HALF_GRID),   //- ( ++- ) SE
 		};
 
 		BuildPolyhedron(mesh, rawVerts);
@@ -79,7 +79,7 @@ public class FlatArmor : ArmorPlate
 	{
 		base.Deserialize(data);
 
-		thicknessField.SetValue(new Thickness(data[thicknessField.Key].Value<float>()));
+		thicknessField.SetValue(data[thicknessField.Key].Value<float>());
 		offsetField.SetValue(data[offsetField.Key].Value<float>());
 	}
 

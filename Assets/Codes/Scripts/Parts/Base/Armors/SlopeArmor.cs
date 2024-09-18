@@ -32,21 +32,21 @@ public class SlopeArmor : ArmorPlate
 			new(thickness, offsetField.Value),
 			new(thickness, offsetField.Value),
 		});
-		meshFilter.mesh = mesh;
+		ApplyMesh();
 	}
 
 	protected override void ConstructMesh(Mesh mesh, in ArmorValue[] av)
 	{
 		Vector3[] rawVerts = new Vector3[8]
 		{
-			new(-Constants.HALF_GRID, -Constants.HALF_GRID, av[0].OffsetMeters),
-			new(Constants.HALF_GRID, -Constants.HALF_GRID, av[1].OffsetMeters),
-			new(Constants.HALF_GRID, av[2].OffsetMeters, -Constants.HALF_GRID),
-			new(-Constants.HALF_GRID, av[3].OffsetMeters, -Constants.HALF_GRID),
-			new(-Constants.HALF_GRID, -Constants.HALF_GRID, av[0].ThicknessMeters + av[0].OffsetMeters),
-			new(Constants.HALF_GRID, -Constants.HALF_GRID, av[1].ThicknessMeters + av[1].OffsetMeters),
-			new(Constants.HALF_GRID, av[2].ThicknessMeters + av[2].OffsetMeters, -Constants.HALF_GRID),
-			new(-Constants.HALF_GRID, av[3].ThicknessMeters + av[3].OffsetMeters, -Constants.HALF_GRID)
+			new(-Constants.HALF_GRID, -Constants.HALF_GRID, av[0].OffsetMeters - av[0].ThicknessMeters / 2),
+			new(Constants.HALF_GRID, -Constants.HALF_GRID, av[1].OffsetMeters - av[1].ThicknessMeters / 2),
+			new(Constants.HALF_GRID, av[2].OffsetMeters - av[2].ThicknessMeters / 2, -Constants.HALF_GRID),
+			new(-Constants.HALF_GRID, av[3].OffsetMeters - av[3].ThicknessMeters / 2, -Constants.HALF_GRID),
+			new(-Constants.HALF_GRID, -Constants.HALF_GRID, av[0].OffsetMeters + av[0].ThicknessMeters / 2),
+			new(Constants.HALF_GRID, -Constants.HALF_GRID, av[1].OffsetMeters + av[1].ThicknessMeters / 2),
+			new(Constants.HALF_GRID, av[2].OffsetMeters + av[2].ThicknessMeters / 2, -Constants.HALF_GRID),
+			new(-Constants.HALF_GRID, av[3].OffsetMeters + av[3].ThicknessMeters / 2, -Constants.HALF_GRID)
 		};
 
 		BuildPolyhedron(mesh, rawVerts);
@@ -78,7 +78,7 @@ public class SlopeArmor : ArmorPlate
 	{
 		base.Deserialize(data);
 
-		thicknessField.SetValue(new Thickness(data[thicknessField.Key].Value<float>()));
+		thicknessField.SetValue(data[thicknessField.Key].Value<float>());
 		offsetField.SetValue(data[offsetField.Key].Value<float>());
 	}
 

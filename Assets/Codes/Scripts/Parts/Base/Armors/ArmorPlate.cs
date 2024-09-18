@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class ArmorPlate : Part
 {
-	[SerializeField] protected MeshFilter meshFilter;
+	[SerializeField] protected MeshFilter[] meshFilter;
+	[SerializeField] protected MeshCollider[] armorMesh;
 	protected Mesh mesh;
 
 	public override void OnSpawned()
@@ -36,14 +37,14 @@ public class ArmorPlate : Part
 	{
 		Vector3[] rawVerts = new Vector3[8]
 		{
-			new(-Constants.HALF_GRID, armorValues[0].OffsetMeters, -Constants.HALF_GRID), 				//- ( --- ) SW
-			new(-Constants.HALF_GRID, armorValues[1].OffsetMeters, Constants.HALF_GRID), 				//- ( --+ ) NW
-			new(Constants.HALF_GRID, armorValues[2].OffsetMeters, Constants.HALF_GRID), 					//- ( +-+ ) NE
-			new(Constants.HALF_GRID, armorValues[3].OffsetMeters, -Constants.HALF_GRID), 				//- ( +-- ) SE
-			new(-Constants.HALF_GRID, armorValues[0].ThicknessMeters + armorValues[0].OffsetMeters, -Constants.HALF_GRID), //- ( -+- ) SW
-			new(-Constants.HALF_GRID, armorValues[1].ThicknessMeters + armorValues[1].OffsetMeters, Constants.HALF_GRID),	//- ( -++ ) NW
-			new(Constants.HALF_GRID, armorValues[2].ThicknessMeters + armorValues[2].OffsetMeters, Constants.HALF_GRID), 	//- ( +++ ) NE
-			new(Constants.HALF_GRID, armorValues[3].ThicknessMeters + armorValues[3].OffsetMeters, -Constants.HALF_GRID),   //- ( ++- ) SE
+			new(-Constants.HALF_GRID, armorValues[0].OffsetMeters - armorValues[0].ThicknessMeters / 2, -Constants.HALF_GRID), 				//- ( --- ) SW
+			new(-Constants.HALF_GRID, armorValues[1].OffsetMeters - armorValues[1].ThicknessMeters / 2, Constants.HALF_GRID), 				//- ( --+ ) NW
+			new(Constants.HALF_GRID, armorValues[2].OffsetMeters - armorValues[2].ThicknessMeters / 2, Constants.HALF_GRID), 					//- ( +-+ ) NE
+			new(Constants.HALF_GRID, armorValues[3].OffsetMeters - armorValues[3].ThicknessMeters / 2, -Constants.HALF_GRID), 				//- ( +-- ) SE
+			new(-Constants.HALF_GRID, armorValues[0].OffsetMeters + armorValues[0].ThicknessMeters / 2, -Constants.HALF_GRID), //- ( -+- ) SW
+			new(-Constants.HALF_GRID, armorValues[1].OffsetMeters + armorValues[1].ThicknessMeters / 2, Constants.HALF_GRID),	//- ( -++ ) NW
+			new(Constants.HALF_GRID, armorValues[2].OffsetMeters + armorValues[2].ThicknessMeters / 2, Constants.HALF_GRID), 	//- ( +++ ) NE
+			new(Constants.HALF_GRID, armorValues[3].OffsetMeters + armorValues[3].ThicknessMeters / 2, -Constants.HALF_GRID),   //- ( ++- ) SE
 		};
 
 		BuildPolyhedron(mesh, rawVerts);
@@ -154,6 +155,20 @@ public class ArmorPlate : Part
 
 		indexOffset += 4;
 	}
+
+	protected void ApplyMesh()
+	{
+		foreach (MeshFilter mf in meshFilter)
+		{
+			mf.mesh = mesh;
+		}
+		foreach (MeshCollider mc in armorMesh)
+		{
+			mc.sharedMesh = mesh;
+		}
+	}
+
+	public void SetArmorMeshes(MeshCollider[] armorMesh) => this.armorMesh = armorMesh;
 
 	[Serializable]
 	public struct Thickness

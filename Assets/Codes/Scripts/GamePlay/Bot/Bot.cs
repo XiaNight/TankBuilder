@@ -1,18 +1,29 @@
 using System.Collections;
+using Unity.VisualScripting.Antlr3.Runtime.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class Bot : MonoBehaviour
 {
 	[SerializeField] private Vehicle vehicle;
+	public Vehicle Vehicle => vehicle;
 	[SerializeField] private string autoLoadJson;
 	[SerializeField] private Transform focusPoint;
 	[SerializeField] private float accuracy = 0.5f;
 	[SerializeField] private float accuracyFreq = 0.1f;
 
+	[Header("Player Detection")]
+	[SerializeField] private float detectionRadius = 100;
+	[SerializeField] private float detectionRate = 0.5f;
+	[SerializeField] private LayerMask detectionRaycastLayer;
+	private bool hasDirectSight = false;
+	private Vector3 sightPosition;
+
+
 	[Header("Navigation")]
 	[SerializeField] private AnimationCurve angleToSteer;
 	[SerializeField] private AnimationCurve angleToThrottle;
+	[SerializeField] private AnimationCurve angleSpeedCurve;
 	[SerializeField] private float throttleMultiplier = 1;
 	[SerializeField] private float navigationUpdateRate = 0.1f;
 
@@ -39,6 +50,12 @@ public class Bot : MonoBehaviour
 
 		StartCoroutine(PathUpdater());
 		StartCoroutine(AutoPilot());
+		if (userVehicle != null) StartCoroutine(DetectPlayer());
+	}
+
+	private void Update()
+	{
+		Debug.DrawLine(vehicle.transform.position, userVehicle.transform.position, Color.red);
 	}
 
 	private void FixedUpdate()
@@ -52,13 +69,52 @@ public class Bot : MonoBehaviour
 
 		focusPoint.position = (targetDirection + inaccuracy) * distance + vehicle.transform.position;
 
-		// foreach (IWeapon weapon in vehicle.Weapons)
+		// if (hasDirectSight)
 		// {
-		// 	if (weapon.IsAimed(focusPoint.position) && weapon.IsLoaded)
+		// 	foreach (IWeapon weapon in vehicle.Weapons)
 		// 	{
-		// 		weapon.Fire();
+		// 		if (weapon.IsAimed(focusPoint.position) && weapon.IsLoaded)
+		// 		{
+		// 			weapon.Fire();
+		// 		}
 		// 	}
 		// }
+	}
+
+	private float CompareDistance(Vector3 A, Vector3 B)
+	{
+		return A.sqrMagnitude - B.sqrMagnitude;
+	}
+
+	private IEnumerator DetectPlayer()
+	{
+		while (true)
+		{
+			yield return new WaitForSeconds(detectionRate);
+
+			hasDirectSight = false;
+			// Ray cast to player vehicle
+			Vector3 selfPos = vehicle.CenterOfMassWorld;
+			Vector3 playerPos = userVehicle.CenterOfMassWorld;
+			Ray ray = new(selfPos, playerPos - selfPos);
+			if (Physics.Raycast(ray.GetPoint(5), ray.direction, out RaycastHit hit, detectionRadius, detectionRaycastLayer))
+			{
+				sightPosition = hit.point;
+				if (hit.transform.CompareTag("Player"))
+				{
+					hasDirectSight = true;
+				}
+			}
+			else
+			{
+				sightPosition = ray.GetPoint(detectionRadius);
+			}
+
+			if (CompareDistance(sightPosition - selfPos, playerPos - selfPos) >= 0)
+			{
+				hasDirectSight = true;
+			}
+		}
 	}
 
 	private IEnumerator PathUpdater()
@@ -84,6 +140,11 @@ public class Bot : MonoBehaviour
 			float side = Mathf.Sign(angle);
 			float steering = angleToSteer.Evaluate(unsignedAngle) * side;
 			float throttle = angleToThrottle.Evaluate(unsignedAngle) * throttleMultiplier;
+			float speed = vehicle.rb.velocity.magnitude * 3.6f; // m/s to km/h
+			float speedLimit = angleSpeedCurve.Evaluate(unsignedAngle);
+
+			// throttle = (speedLimit - speed + 10) / 10 * throttle;
+			// Debug.Log($"Speed: {speed} Speed Limit: {speedLimit} Throttle: {throttle}");
 
 			//Determin next point is in front or back
 			if (Vector3.Dot(vehicle.transform.forward, toTarget) > 0)
@@ -95,6 +156,16 @@ public class Bot : MonoBehaviour
 			{
 				vehicle.Powertrain.SetThrottle(-throttle);
 				vehicle.Powertrain.SetSteer(-steering);
+			}
+
+			if (speed > speedLimit)
+			{
+				vehicle.Powertrain.SetThrottle(0);
+				vehicle.Powertrain.SetBrake(1);
+			}
+			else
+			{
+				vehicle.Powertrain.SetBrake(0);
 			}
 		}
 	}
@@ -149,6 +220,17 @@ public class Bot : MonoBehaviour
 
 		Gizmos.color = Color.red;
 		Gizmos.DrawSphere(GetNextPointOnPath(5), 0.2f);
+
+
+		//- Detection
+		if (userVehicle == null) return;
+		Vector3 selfPos = vehicle.CenterOfMassWorld;
+		Vector3 playerPos = userVehicle.CenterOfMassWorld;
+		Gizmos.color = hasDirectSight ? Color.green : Color.red;
+		Gizmos.DrawLine(selfPos, playerPos);
+
+		Gizmos.color = Color.yellow;
+		Gizmos.DrawSphere(sightPosition, 0.2f);
 	}
 
 	private Vector3 PerlinRandomSphere(float scale = 1)

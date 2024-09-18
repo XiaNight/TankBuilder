@@ -21,6 +21,12 @@ public class TestDriveState : HangarManager.State
 		hangar.vehicleCamera.enabled = true;
 		hangar.partList.enabled = false;
 
+		Bot[] bots = Object.FindObjectsOfType<Bot>();
+		foreach (Bot bot in bots)
+		{
+			bot.Vehicle.SetPlayingMode(true);
+		}
+
 		UserUpdate.Instance.AddInterface(hangar.playerVehicle);
 	}
 

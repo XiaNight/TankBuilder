@@ -260,8 +260,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7750941704498017638}
-  - component: {fileID: 7406354045070426737}
-  - component: {fileID: 2111193813835503388}
+  - component: {fileID: 7431695645027367571}
   m_Layer: 9
   m_Name: Cube
   m_TagString: Untagged
@@ -279,21 +278,13 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.25, y: 0.25, z: 0.25}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3936385927843365926}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &7406354045070426737
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1864662917044467054}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!65 &2111193813835503388
-BoxCollider:
+--- !u!64 &7431695645027367571
+MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -310,9 +301,10 @@ BoxCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 0}
 --- !u!1 &2040577523383022510
 GameObject:
   m_ObjectHideFlags: 0
@@ -492,7 +484,9 @@ GameObject:
   - component: {fileID: 4303839557590416666}
   - component: {fileID: 3611983550078195835}
   - component: {fileID: 4422180637893369024}
-  m_Layer: 0
+  - component: {fileID: 6111965400702207354}
+  - component: {fileID: 743761701787194870}
+  m_Layer: 11
   m_Name: Armor Mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -564,6 +558,41 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &6111965400702207354
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3350554793947197601}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 0}
+--- !u!114 &743761701787194870
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3350554793947197601}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61f4a63f819686641bf86f5ca8aa5bd9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  armorDensity: 1
 --- !u!1 &3420918670191746809
 GameObject:
   m_ObjectHideFlags: 0
@@ -1156,8 +1185,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7889478783237650944}
-  - component: {fileID: 6405045333332934006}
-  - component: {fileID: 1302697617432144044}
+  - component: {fileID: 8104223385560704011}
   m_Layer: 8
   m_Name: Cube (2)
   m_TagString: Untagged
@@ -1180,16 +1208,8 @@ Transform:
   m_Children: []
   m_Father: {fileID: 6814696002937788682}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &6405045333332934006
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6545524734435980788}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!65 &1302697617432144044
-BoxCollider:
+--- !u!64 &8104223385560704011
+MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -1206,9 +1226,10 @@ BoxCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 0}
 --- !u!1 &8163138723127995046
 GameObject:
   m_ObjectHideFlags: 0
@@ -1220,8 +1241,8 @@ GameObject:
   - component: {fileID: 5906116380328920429}
   - component: {fileID: 7509205263983680348}
   - component: {fileID: 1568187498928834944}
-  - component: {fileID: 7404451067636442620}
-  m_Layer: 9
+  - component: {fileID: 3044873464390148763}
+  m_Layer: 0
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1238,7 +1259,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.275, y: 0.275, z: 0.275}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1796887694661506226}
@@ -1293,27 +1314,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &7404451067636442620
-BoxCollider:
+--- !u!114 &3044873464390148763
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8163138723127995046}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4218d78ef2d54d0898b7514e121a781f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1001 &8543729291329378031
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1503,11 +1516,18 @@ MonoBehaviour:
   mountsContainer: {fileID: 5666913361830944799}
   interactionColliders: {fileID: 2370912641539009228}
   highlightVisual: {fileID: 4607205428058242920}
-  highlightOutlines: []
+  highlightOutlines:
+  - {fileID: 3044873464390148763}
   rotationRestriction: 0
   health: 100
   maxHealth: 100
-  meshFilter: {fileID: 3611983550078195835}
+  meshFilter:
+  - {fileID: 3611983550078195835}
+  - {fileID: 7509205263983680348}
+  armorMesh:
+  - {fileID: 8104223385560704011}
+  - {fileID: 7431695645027367571}
+  - {fileID: 6111965400702207354}
   thicknessField:
     key: thickness
     displayName: Thickness

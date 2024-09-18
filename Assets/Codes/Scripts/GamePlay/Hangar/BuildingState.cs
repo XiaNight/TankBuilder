@@ -36,6 +36,12 @@ public class BuildingState : HangarManager.State
 
 		hangar.buildModeToggleGroup.Enable();
 
+		Bot[] bots = Object.FindObjectsOfType<Bot>();
+		foreach (Bot bot in bots)
+		{
+			bot.Vehicle.SetPlayingMode(false);
+		}
+
 		UpdateState();
 	}
 

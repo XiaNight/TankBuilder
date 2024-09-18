@@ -17,6 +17,7 @@ public class Vehicle : MonoBehaviour, IUserUpdate
 	public bool IsPlaying { get; private set; } = false;
 	public bool IsUser { get; private set; } = false;
 	public Vector3 CenterOfMass { get; private set; }
+	public Vector3 CenterOfMassWorld => transform.TransformPoint(CenterOfMass);
 
 	private void Awake()
 	{
@@ -81,13 +82,7 @@ public class Vehicle : MonoBehaviour, IUserUpdate
 				}
 				OnCalculateBounds.Invoke(bounds);
 			}
-
-			// lower center of mass by 70%
-			rb.ResetCenterOfMass();
-			CenterOfMass = rb.centerOfMass;
-			rb.centerOfMass -= 0.5f * rb.centerOfMass.y * Vector3.up;
-
-			Debug.Log(rb.centerOfMass);
+			RecalculateCenterOfMass();
 		}
 		else
 		{
@@ -95,6 +90,16 @@ public class Vehicle : MonoBehaviour, IUserUpdate
 			rootContraption.OnEndPlay();
 			transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
 		}
+	}
+
+	/// <summary>
+	/// lower center of mass by 70%
+	/// </summary>
+	private void RecalculateCenterOfMass()
+	{
+		rb.ResetCenterOfMass();
+		CenterOfMass = rb.centerOfMass;
+		rb.centerOfMass -= 0.5f * rb.centerOfMass.y * Vector3.up;
 	}
 
 	private void OnPartAdded(Part part)
@@ -108,6 +113,7 @@ public class Vehicle : MonoBehaviour, IUserUpdate
 		{
 			Weapons.Add(weapon);
 		}
+		RecalculateCenterOfMass();
 	}
 
 	private void OnPartRemoved(Part part)
@@ -116,6 +122,7 @@ public class Vehicle : MonoBehaviour, IUserUpdate
 		if (part is PowerUnit powerUnit) powertrain.RemovePowerUnit(powerUnit);
 		if (part is IMovement movement) powertrain.Remove(movement);
 		if (part is IWeapon weapon) Weapons.Remove(weapon);
+		RecalculateCenterOfMass();
 	}
 
 	public string GetSerializedData()

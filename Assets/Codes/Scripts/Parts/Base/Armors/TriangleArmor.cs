@@ -32,7 +32,7 @@ public class TriangleArmor : ArmorPlate
 			new(thickness, offsetField.Value),
 			new(thickness, offsetField.Value),
 		});
-		meshFilter.mesh = mesh;
+		ApplyMesh();
 	}
 
 	protected override void ConstructMesh(Mesh mesh, in ArmorValue[] av)

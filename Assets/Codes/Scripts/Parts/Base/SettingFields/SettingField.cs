@@ -42,7 +42,8 @@ public class SettingField<T> : ISettingField
 
 	public void SetValue(object value)
 	{
-		SetValue((T)value);
+		if (value is T t) SetValue(t);
+		else Debug.LogError($"Value ({value.GetType()}) is not of type {typeof(T).FullName}");
 	}
 
 	public virtual bool VerifyValue(object value, out object fixedValue)
