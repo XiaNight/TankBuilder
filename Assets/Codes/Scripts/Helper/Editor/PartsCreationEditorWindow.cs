@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEditor;
-
+#if UNITY_EDITOR
 public class PartsCreationEditorWindow : EditorWindow
 {
 	private Mount mount;
@@ -101,3 +101,4 @@ public class PartsCreationEditorWindow : EditorWindow
 		}
 	}
 }
+#endif

@@ -12,7 +12,7 @@ public class TestDriveState : HangarManager.State
 		hangar.SetModeText("Test Drive Mode");
 
 		Vehicle vehicle = hangar.playerVehicle;
-		vehicle.SetPlayingMode(true);
+		vehicle.SetPlayingMode(true, true);
 		vehicle.transform.SetLocalPositionAndRotation(new Vector3(0, 0, 0), Quaternion.identity);
 		vehicle.RestoreOriginal();
 
@@ -24,7 +24,7 @@ public class TestDriveState : HangarManager.State
 		Bot[] bots = Object.FindObjectsOfType<Bot>();
 		foreach (Bot bot in bots)
 		{
-			bot.Vehicle.SetPlayingMode(true);
+			bot.Vehicle.SetPlayingMode(true, true);
 		}
 
 		UserUpdate.Instance.AddInterface(hangar.playerVehicle);

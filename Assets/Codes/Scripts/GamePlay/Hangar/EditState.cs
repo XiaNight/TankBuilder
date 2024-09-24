@@ -13,7 +13,7 @@ public class EditState : HangarManager.State
 
 		hangar.SetModeText("Edit Mode");
 
-		hangar.playerVehicle.SetPlayingMode(false);
+		hangar.playerVehicle.SetPlayingMode(false, false);
 		hangar.freeCam.enabled = true;
 		hangar.vehicleCamera.enabled = false;
 		hangar.partList.enabled = true;

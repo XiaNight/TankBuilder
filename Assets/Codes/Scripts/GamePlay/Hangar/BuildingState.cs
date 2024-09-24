@@ -20,7 +20,7 @@ public class BuildingState : HangarManager.State
 		hangar.SetModeText("Building Mode");
 
 		//- Reset vehicle
-		hangar.playerVehicle.SetPlayingMode(false);
+		hangar.playerVehicle.SetPlayingMode(false, false);
 		hangar.freeCam.enabled = true;
 		hangar.vehicleCamera.enabled = false;
 		hangar.partList.enabled = true;
@@ -39,7 +39,7 @@ public class BuildingState : HangarManager.State
 		Bot[] bots = Object.FindObjectsOfType<Bot>();
 		foreach (Bot bot in bots)
 		{
-			bot.Vehicle.SetPlayingMode(false);
+			bot.Vehicle.SetPlayingMode(false, false);
 		}
 
 		UpdateState();

@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class HangarManager : MonoBehaviour
 {
@@ -44,6 +45,16 @@ public class HangarManager : MonoBehaviour
 		State lastState = gameState;
 		gameState = state;
 		gameState.OnEnable(this, lastState);
+	}
+
+	public void Ready()
+	{
+		SceneManager.LoadScene("GamePlay");
+	}
+
+	public void Leave()
+	{
+		SceneManager.LoadScene("Hangar");
 	}
 
 	public class State

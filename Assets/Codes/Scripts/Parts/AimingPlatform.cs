@@ -16,8 +16,6 @@ public class AimingPlatform : FreeHinge
 	[Header("PId Control")]
 	[SerializeField] private float angleToStop;
 	[SerializeField] private float postAmplitude;
-
-	private Transform aimingTarget;
 	private Vector3 localTargetPosition;
 
 	private new void Awake()
@@ -72,7 +70,6 @@ public class AimingPlatform : FreeHinge
 	public override void OnPlay()
 	{
 		base.OnPlay();
-		SetAimingTarget(AttachedVehicle.focusPoint);
 
 		//- Set Motor
 		JointMotor motor = hingeJoint.motor;
@@ -93,12 +90,9 @@ public class AimingPlatform : FreeHinge
 		this.angleToStop = angleToStop * 1.1f;
 	}
 
-	public void SetAimingTarget(Transform target) => aimingTarget = target;
-
 	private void UpdateAimingDirection()
 	{
-		if (aimingTarget == null) return;
-		localTargetPosition = content.InverseTransformPoint(aimingTarget.position);
+		localTargetPosition = content.InverseTransformPoint(AttachedVehicle.focusPoint.position);
 		localTargetPosition.y = 0;
 		localTargetPosition.Normalize();
 	}
@@ -176,7 +170,7 @@ public class AimingPlatform : FreeHinge
 
 		//- Local Target Direction
 		Gizmos.color = Color.red;
-		Vector3 targetLocal = content.InverseTransformPoint(aimingTarget.position);
+		Vector3 targetLocal = content.InverseTransformPoint(AttachedVehicle.focusPoint.position);
 		targetLocal.y = 0;
 		targetLocal = targetLocal.normalized * GIZMO_SIZE;
 		Gizmos.DrawLine(content.position, content.TransformPoint(targetLocal));

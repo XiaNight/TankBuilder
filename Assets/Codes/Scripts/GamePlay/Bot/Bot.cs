@@ -35,7 +35,7 @@ public class Bot : MonoBehaviour
 		if (autoLoadJson != null)
 		{
 			vehicle.SetSerializedData(autoLoadJson);
-			vehicle.SetPlayingMode(true);
+			// vehicle.SetPlayingMode(true);
 		}
 
 		Vehicle[] vehicles = FindObjectsOfType<Vehicle>();
@@ -48,14 +48,18 @@ public class Bot : MonoBehaviour
 			}
 		}
 
-		StartCoroutine(PathUpdater());
-		StartCoroutine(AutoPilot());
-		if (userVehicle != null) StartCoroutine(DetectPlayer());
+		if (userVehicle != null)
+		{
+			StartCoroutine(PathUpdater());
+			StartCoroutine(AutoPilot());
+			StartCoroutine(DetectPlayer());
+		}
 	}
 
 	private void Update()
 	{
-		Debug.DrawLine(vehicle.transform.position, userVehicle.transform.position, Color.red);
+		if (userVehicle != null)
+			Debug.DrawLine(vehicle.transform.position, userVehicle.transform.position, Color.red);
 	}
 
 	private void FixedUpdate()
@@ -119,6 +123,7 @@ public class Bot : MonoBehaviour
 
 	private IEnumerator PathUpdater()
 	{
+		if (userVehicle == null) yield break;
 		while (true)
 		{
 			FindPathTo(userVehicle.transform.position);

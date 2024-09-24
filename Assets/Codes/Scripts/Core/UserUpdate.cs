@@ -51,7 +51,6 @@ public class UserUpdate : MonoBehaviour
 	}
 }
 
-
 public interface IUserUpdate
 {
 	public void UserLoop() { }

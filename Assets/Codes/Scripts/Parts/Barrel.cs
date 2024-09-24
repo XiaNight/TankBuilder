@@ -10,6 +10,12 @@ public class Barrel : Part, IWeapon
 	[SerializeField] private GameObject firingEffect;
 	[SerializeField] private float reloadTime = 1;
 	[SerializeField] private bool isReloaded = true;
+
+	[Header("Casing")]
+	[SerializeField] private GameObject casingPrefab;
+	[SerializeField] private Transform casingExit;
+	[SerializeField] private float casingExitForce = 1;
+
 	private Rigidbody rb;
 	bool IWeapon.IsLoaded => isReloaded;
 
@@ -56,7 +62,25 @@ public class Barrel : Part, IWeapon
 			Destroy(effect, 2);
 		}
 
+		EjectCasing();
+
 		StartCoroutine(Reload());
+	}
+
+	private void EjectCasing()
+	{
+		if (casingPrefab == null) return;
+		if (casingExit == null) return;
+		GameObject casing = Instantiate(casingPrefab, casingExit.position, casingExit.rotation);
+		if (casing.TryGetComponent(out Rigidbody casingRb))
+		{
+			casingRb.velocity = rb.velocity;
+			casingRb.AddForce(casingExit.forward * casingExitForce, ForceMode.Impulse);
+
+			// add random rotation
+			casingRb.AddTorque(casing.transform.right * Random.Range(0.3f, 1.1f), ForceMode.Impulse);
+		}
+		Destroy(casing, 5);
 	}
 
 	bool IWeapon.IsAimed(Vector3 pos)

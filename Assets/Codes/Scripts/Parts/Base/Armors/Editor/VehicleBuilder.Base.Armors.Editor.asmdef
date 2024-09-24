@@ -1,0 +1,18 @@
+{
+    "name": "VehicleBuilder.Base.Armors.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:ce7e898c2f290a14e94743fcb929a01f"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

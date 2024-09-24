@@ -10,6 +10,8 @@ public class Vehicle : MonoBehaviour, IUserUpdate
 	public Transform focusPoint;
 	public UnityEvent<Bounds> OnCalculateBounds;
 
+	[SerializeField] private VehicleCamera vehicleCamera;
+	public VehicleCamera VehicleCamera => vehicleCamera;
 	[SerializeField] private Powertrain powertrain;
 	public Powertrain Powertrain => powertrain;
 
@@ -61,14 +63,14 @@ public class Vehicle : MonoBehaviour, IUserUpdate
 		rootContraption.RestoreOriginal();
 	}
 
-	public void SetPlayingMode(bool isPlaying)
+	public void SetPlayingMode(bool isPlaying, bool physicsEnabled)
 	{
 		if (this.IsPlaying == isPlaying) return;
 		this.IsPlaying = isPlaying;
 		if (isPlaying)
 		{
 			rootContraption.OnPlay();
-			rb.isKinematic = false;
+			rb.isKinematic = !physicsEnabled;
 			rb.mass = rootContraption.CalculateMass();
 
 			// Calculate bounds center
@@ -141,5 +143,7 @@ public class Vehicle : MonoBehaviour, IUserUpdate
 		rootContraption.Deserialize(jObject);
 
 		rootContraption.OnSpawned();
+
+		rb.mass = rootContraption.CalculateMass();
 	}
 }
