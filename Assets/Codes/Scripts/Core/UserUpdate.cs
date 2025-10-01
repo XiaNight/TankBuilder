@@ -51,6 +51,12 @@ public class UserUpdate : MonoBehaviour
 	}
 }
 
+public class InputData
+{
+	public string key;
+	public float vlaue;
+}
+
 public interface IUserUpdate
 {
 	public void UserLoop() { }
